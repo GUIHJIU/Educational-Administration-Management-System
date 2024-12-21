@@ -14,4 +14,5 @@ public class CourseManageService {
     public List< Course > ShowAllCourse(){
         return mapper.selectAllCourse();
     }
+    public void InsertCourse (Course course){mapper.insertCourse(course);}
 }

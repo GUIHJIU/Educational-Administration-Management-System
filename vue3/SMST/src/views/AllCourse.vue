@@ -2,6 +2,7 @@
     <div>
         <h1>Course List</h1>
         <ul>
+            
             <li v-for="item in CourseList" :key="item.courseId">
                 {{ item.courseId }} - {{ item.courseName }} - {{ item.credit }} - {{ item.classHour }}
             </li>
