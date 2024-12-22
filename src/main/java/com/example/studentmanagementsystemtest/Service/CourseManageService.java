@@ -14,5 +14,10 @@ public class CourseManageService {
     public List< Course > ShowAllCourse(){
         return mapper.selectAllCourse();
     }
+    public List< Course > SearchCourse(String queryType,String queryParam){
+        return mapper.searchCourse(queryType,queryParam);
+    }
     public void InsertCourse (Course course){mapper.insertCourse(course);}
+    public int UpdateCourse(Course course){return mapper.updateCourse(course);}
+    public int DeleteCourse(int courseId){return mapper.deleteCourse(courseId);}
 }

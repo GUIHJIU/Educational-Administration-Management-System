@@ -17,6 +17,10 @@ public class CourseManageController {
     {
         return postshowall();
     }
+    @GetMapping("/searchcourse")
+    public List<Course> SearchCourse(@RequestParam("queryType")String queryType,@RequestParam("queryParam") String queryParam){
+        return service.SearchCourse(queryType,queryParam);
+    }
     @PostMapping("/course")
     public List<Course> postshowall()
     {
@@ -26,5 +30,13 @@ public class CourseManageController {
     public String InsertCourse(@RequestBody Course course){
         service.InsertCourse(course);
         return "Course data received successfully";
+    }
+    @PutMapping("/updatecourse")
+    public int UpdateCourse(@RequestBody Course course){
+        return service.UpdateCourse(course);
+    }
+    @DeleteMapping("/deletecourse")
+    public int DeleteCourse(@RequestParam("courseId")int courseId){
+        return service.DeleteCourse(courseId);
     }
 }

@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import {useridentitystore} from '@/store/userStore'
+import {storeToRefs} from 'pinia'
+const userstore=useridentitystore()
+const x=storeToRefs(userstore)
+function changehole()
+{
+    if(x.identity.value=='teacher')
+      userstore.identity='student'
+    else
+      userstore.identity='teacher'
+}
 </script>
 
 <template>
@@ -8,12 +19,16 @@ import { RouterLink, RouterView } from 'vue-router'
 
     <div class="wrapper">
       <nav>
-        <RouterLink to="/course">course</RouterLink>
+        <RouterLink to="/course" v-if="x.identity.value=='teacher'">course</RouterLink>
+        <h1 v-else>什么都没有</h1>
       </nav>
+      <button @click="changehole">切换身份</button>
     </div>
   </header>
-
-  <RouterView />
+  <div v-if="x.identity.value=='teacher'">
+    <RouterView />
+  </div>
+  
 </template>
 
 <style scoped>
