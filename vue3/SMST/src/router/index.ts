@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AddPage from '../views/add.vue';
-import ListPage from '../views/score.vue';
-import DeletePage from '../views/delete.vue';
+import ListPage from '../views/scoremanage.vue';
+import DeletePage from '../views/deletescore.vue';
 import UpdatePage from '../views/update.vue';
 
 const router = createRouter({

@@ -57,9 +57,9 @@
         <tbody>
           <tr v-for="(score, index) in paginatedScoreList" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ score.studentid }}</td>
-            <td>{{ score.courseid }}</td>
-            <td>{{ score.score }}</td>
+            <td>{{ scoremanage.studentid }}</td>
+            <td>{{ scoremanage.courseid }}</td>
+            <td>{{ scoremanage.score }}</td>
           </tr>
         </tbody>
       </table>
@@ -96,8 +96,8 @@ const filteredScoreList = computed(() => {
     return scoreList.value;
   }
   return scoreList.value.filter(score => {
-    return score.studentid.toString().includes(studentid.value) &&
-           score.courseid.toString().includes(courseid.value);
+    return scoremanage.studentid.toString().includes(studentid.value) &&
+           scoremanage.courseid.toString().includes(courseid.value);
   });
 });
 
