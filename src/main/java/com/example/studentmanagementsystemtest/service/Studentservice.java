@@ -33,14 +33,14 @@ public class Studentservice implements Studentserviceimpl
     }
 
     @Override
-    public void deleteStudent(int stuNum)
+    public void deleteStudent(int stu_num)
     {
-        studentmapper.deleteStudent(stuNum);
+        studentmapper.deleteStudent(stu_num);
     }
 
     @Override
-    public Student getStudentByStuNum(int stuNum)
+    public Student getStudentBystu_num(int stu_num)
     {
-        return studentmapper.getStudentByStuNum(stuNum);
+        return studentmapper.getStudentBystu_num(stu_num);
     }
 }
