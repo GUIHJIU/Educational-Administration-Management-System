@@ -2,8 +2,6 @@ package com.example.studentmanagementsystemtest.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 
 public class Student
@@ -16,5 +14,8 @@ public class Student
     public String stuClass;
     public String stuMajor;
     public String stuCollege;
+    public String stuState;
+    public String stuHome;
+
 
 }

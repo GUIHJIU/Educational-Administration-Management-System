@@ -83,25 +83,28 @@ public class Studentcontroller {
     }
 
     // 根据学号获取学生信息的接口方法
-    @GetMapping("/{stuNum}")
-    public ResponseEntity<Integer> getStudentByStuNum(@PathVariable int stuNum) {
+    @GetMapping("/search/{stuNum}")
+    public ResponseEntity<Student> getStudentByStuNum(@PathVariable int stuNum) {
         try {
+            System.out.println("4654156341");
             Student student = studentservice.getStudentByStuNum(stuNum);
-            if (student!= null) {
-                // 如果查询到学生信息，返回状态码为200以及一个自定义的表示查询成功的标识值（这里返回200，可根据实际情况调整）
-                return new ResponseEntity<>(200, HttpStatus.OK);
-            } else {
-                // 如果未查询到学生信息，返回状态码为404（NOT_FOUND）以及一个自定义的表示未找到的标识值（这里返回404，可根据实际情况调整）
-                return new ResponseEntity<>(404, HttpStatus.NOT_FOUND);
+            if (student!= null)
+            {
+                // 如果查询到学生信息，返回状态码为200以及包含学生信息的实体对象
+                return new ResponseEntity<>(student, HttpStatus.OK);
+            } else
+            {
+                // 如果未查询到学生信息，返回状态码为404（NOT_FOUND）
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (DataAccessException e) {
             logger.error("根据学号查询学生信息出现数据库访问异常", e);
-            // 如果出现数据库访问相关异常，返回状态码为500（Internal Server Error）以及一个自定义的数据库异常错误标识值（这里返回5001，可根据实际情况调整）
-            return new ResponseEntity<>(5001, HttpStatus.INTERNAL_SERVER_ERROR);
+            // 如果出现数据库访问相关异常，返回状态码为500（Internal Server Error）
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             logger.error("根据学号查询学生信息出现其他异常", e);
-            // 捕获其他通用异常，同样返回500状态码及一个自定义的通用异常错误标识值（这里返回5000，可根据实际情况调整）
-            return new ResponseEntity<>(5000, HttpStatus.INTERNAL_SERVER_ERROR);
+            // 捕获其他通用异常，同样返回500状态码
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
