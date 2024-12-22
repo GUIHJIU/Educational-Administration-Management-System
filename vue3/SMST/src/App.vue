@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from 'vue-router';
     <nav class="navbar">
       <router-link to="/user-info" class="nav-link">用户信息管理</router-link>
       <router-link to="/course-info" class="nav-link">课程信息管理</router-link>
-      <router-link to="/List" class="nav-link">学生学籍管理</router-link>
+      <router-link to="/list" class="nav-link">学生学籍管理</router-link>
       <router-link to="/score" class="nav-link">成绩管理</router-link>
       <router-link to="/course-selection" class="nav-link">选课管理</router-link>
       <router-link to="/exam" class="nav-link">考试管理</router-link>
