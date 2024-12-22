@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-// 这里假设后续会有对应的各个管理组件，先引入个示例占位组件（实际需替换为真实组件）
-import UserInfoManage from './components/UserInfoManage.vue';
-import CourseInfoManage from './components/CourseInfoManage.vue';
-import StudentStatusManage from './components/StudentStatusManage.vue';
-import ScoreManage from './components/ScoreManage.vue';
-import CourseSelectionManage from './components/CourseSelectionManage.vue';
-import ExamManage from './components/ExamManage.vue';
 </script>
 
 <template>

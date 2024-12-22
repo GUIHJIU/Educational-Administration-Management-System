@@ -1,50 +1,21 @@
 <template>
   <div class="form-container">
-    <h2 class="page-title">添加学生信息</h2>
+    <h2 class="page-title">添加学生成绩</h2>
     
     <form class="student-form" @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label>学号</label>
-        <input type="text" v-model="formData.stuNum" placeholder="请输入学号" required>
+        <label>学生ID</label>
+        <input type="number" v-model="formData.studentid" placeholder="请输入学生ID" required>
       </div>
       
       <div class="form-group">
-        <label>姓名</label>
-        <input type="text" v-model="formData.stuName" placeholder="请输入姓名" required>
+        <label>课程ID</label>
+        <input type="number" v-model="formData.courseid" placeholder="请输入课程ID" required>
       </div>
       
       <div class="form-group">
-        <label>性别</label>
-        <select v-model="formData.stuSex" required>
-          <option value="">请选择性别</option>
-          <option value="男">男</option>
-          <option value="女">女</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label>班级</label>
-        <input type="text" v-model="formData.stuClass" placeholder="请输入班级" required>
-      </div>
-      
-      <div class="form-group">
-        <label>专业</label>
-        <input type="text" v-model="formData.stuMajor" placeholder="请输入专业" required>
-      </div>
-      
-      <div class="form-group">
-        <label>学院</label>
-        <input type="text" v-model="formData.stuCollege" placeholder="请输入学院" required>
-      </div>
-      
-      <div class="form-group">
-        <label>电话</label>
-        <input type="tel" v-model="formData.stuPhone" placeholder="请输入电话号码" required>
-      </div>
-      
-      <div class="form-group">
-        <label>入学时间</label>
-        <input type="date" v-model="formData.stuTime" required>
+        <label>成绩</label>
+        <input type="number" v-model="formData.score" placeholder="请输入成绩" required>
       </div>
       
       <div class="form-actions">
@@ -70,14 +41,9 @@ const router = useRouter();
 const API_BASE_URL = 'http://localhost:8080/student';
 
 const formData = ref({
-  stuNum: '',
-  stuName: '',
-  stuSex: '',
-  stuClass: '',
-  stuMajor: '',
-  stuCollege: '',
-  stuPhone: '',
-  stuTime: ''
+  studentid: '',
+  courseid: '',
+  score: ''
 });
 
 const handleSubmit = async () => {
@@ -85,18 +51,18 @@ const handleSubmit = async () => {
     const response = await axios.post(`${API_BASE_URL}/add`, formData.value);
     if (response.status === 200) {
       alert('添加成功');
-      router.push('/list');
+      router.push('/score');
     } else {
       throw new Error('添加失败');
     }
   } catch (error) {
-    console.error('添加学生信息出错：', error);
+    console.error('添加学生成绩出错：', error);
     alert(error.message || '添加失败，请稍后重试');
   }
 };
 
 const handleCancel = () => {
-  router.push('/list');
+  router.push('/score');
 };
 </script>
 
