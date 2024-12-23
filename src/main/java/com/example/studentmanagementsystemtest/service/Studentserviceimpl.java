@@ -14,10 +14,9 @@ public interface Studentserviceimpl
   public int updateStudent(Student student);
 
   // 删除学生信息
-  public void deleteStudent(int stuNum);
+  public void deleteStudent(int stu_num);
 
   //根据用户学号查询学生信息
-  public Student getStudentByStuNum(int stuNum);
-
-
+  public Student getStudentBystu_num(int stu_num);
+  
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,7 @@ public class Studentcontroller {
             // 调用服务层获取所有学生信息的方法
             List<Student> studentList = studentservice.getAllStudent();
             logger.info("成功获取到 {} 条学生信息", studentList.size());
+            System.out.println(studentList);
             return new ResponseEntity<>(studentList, HttpStatus.OK);
         } catch (DataAccessException e) {
             logger.error("获取学生信息列表出现数据库访问异常", e);
@@ -63,7 +65,6 @@ public class Studentcontroller {
     @PutMapping("/update")
     public ResponseEntity<Integer> updateStudent(@RequestBody Student student)
     {
-
         try
         {
             int result = studentservice.updateStudent(student);
@@ -83,20 +84,12 @@ public class Studentcontroller {
     }
 
     // 根据学号获取学生信息的接口方法
-    @GetMapping("/search/{stuNum}")
-    public ResponseEntity<Student> getStudentByStuNum(@PathVariable int stuNum) {
+    @GetMapping("/search/{stu_num}")
+    public ResponseEntity<Student> getStudentBystu_num(@PathVariable int stu_num)
+    {
         try {
-            System.out.println("4654156341");
-            Student student = studentservice.getStudentByStuNum(stuNum);
-            if (student!= null)
-            {
-                // 如果查询到学生信息，返回状态码为200以及包含学生信息的实体对象
-                return new ResponseEntity<>(student, HttpStatus.OK);
-            } else
-            {
-                // 如果未查询到学生信息，返回状态码为404（NOT_FOUND）
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+            Student student = studentservice.getStudentBystu_num(stu_num);
+            return new ResponseEntity<>(student, HttpStatus.OK);
         } catch (DataAccessException e) {
             logger.error("根据学号查询学生信息出现数据库访问异常", e);
             // 如果出现数据库访问相关异常，返回状态码为500（Internal Server Error）
@@ -109,11 +102,11 @@ public class Studentcontroller {
     }
 
     // 删除学生信息的接口方法，接收学号作为路径参数，并完善错误处理逻辑
-    @DeleteMapping("/delete/{stuNum}")
-    public ResponseEntity<Integer> deleteStudentById(@PathVariable int stuNum)
+    @DeleteMapping("/delete/{stu_num}")
+    public ResponseEntity<Integer> deleteStudentById(@PathVariable int stu_num)
     {
         // 调用服务层的删除学生方法
-        studentservice.deleteStudent(stuNum);
+        studentservice.deleteStudent(stu_num);
         return ResponseEntity.ok(200);
     }
 

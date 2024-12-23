@@ -1,96 +1,126 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
 import {useridentitystore} from '@/store/userStore'
-import {storeToRefs} from 'pinia'
-const userstore=useridentitystore()
-const x=storeToRefs(userstore)
-function changehole()
-{
-    if(x.identity.value=='teacher')
-      userstore.identity='student'
-    else
-      userstore.identity='teacher'
-}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div id="app">
+    <nav class="navbar">
+      <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
+      <RouterLink to="/coursenav" class="nav-link">课程信息管理</RouterLink>
+      <RouterLink to="/list" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
+      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
+      <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
+    </nav>
 
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/course" v-if="x.identity.value=='teacher'">course</RouterLink>
-        <h1 v-else>什么都没有</h1>
-      </nav>
-      <button @click="changehole">切换身份</button>
-    </div>
-  </header>
-  <div v-if="x.identity.value=='teacher'">
-    <RouterView />
+    <main class="main-content">
+      <RouterView />
+    </main>
   </div>
-  
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-nav {
+#app {
+  display: flex;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.navbar {
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1a237e 0%, #283593 100%);
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 0.8rem 1.5rem;
+  margin: 0.2rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transform: translateX(5px);
 }
 
-nav a:first-of-type {
-  border: 0;
+.nav-link.RouterLink-active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+.main-content {
+  position: absolute;
+  left: 220px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f5f7fa;
+}
+
+/* 添加过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 0.5rem;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .nav-link {
+    margin: 0.2rem 0.5rem;
+    padding: 0.8rem 1.2rem;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .main-content {
+    margin-left: 0;
+    width: 100%;
   }
 }
 </style>

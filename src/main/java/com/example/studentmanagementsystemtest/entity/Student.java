@@ -6,16 +6,15 @@ import lombok.Data;
 
 public class Student
 {
-    public int stuNum;
-    public String stuName;
-    public String stuSex;
-    public String stuPhone;
-    public String stuTime;
-    public String stuClass;
-    public String stuMajor;
-    public String stuCollege;
-    public String stuState;
-    public String stuHome;
-
+    public int stu_num;
+    public String stu_name;
+    public String stu_sex;
+    public String stu_phone;
+    public String stu_time;
+    public String stu_class;
+    public String stu_major;
+    public String stu_college;
+    public String stu_state;
+    public String stu_home;
 
 }

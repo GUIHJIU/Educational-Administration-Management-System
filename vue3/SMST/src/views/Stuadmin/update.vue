@@ -1,18 +1,15 @@
 <template>
   <div class="form-container">
-    <h2 class="page-title">添加学生信息</h2>
-    
+    <h2 class="page-title">修改学生信息</h2>
     <form class="student-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label>学号</label>
-        <input type="text" v-model="formData.stuNum" placeholder="请输入学号" required>
+        <input type="text" v-model="formData.stuNum" placeholder="请输入学号" readonly>
       </div>
-      
       <div class="form-group">
         <label>姓名</label>
         <input type="text" v-model="formData.stuName" placeholder="请输入姓名" required>
       </div>
-      
       <div class="form-group">
         <label>性别</label>
         <select v-model="formData.stuSex" required>
@@ -21,32 +18,26 @@
           <option value="女">女</option>
         </select>
       </div>
-      
       <div class="form-group">
         <label>班级</label>
         <input type="text" v-model="formData.stuClass" placeholder="请输入班级" required>
       </div>
-      
       <div class="form-group">
         <label>专业</label>
         <input type="text" v-model="formData.stuMajor" placeholder="请输入专业" required>
       </div>
-      
       <div class="form-group">
         <label>学院</label>
         <input type="text" v-model="formData.stuCollege" placeholder="请输入学院" required>
       </div>
-      
       <div class="form-group">
         <label>电话</label>
         <input type="tel" v-model="formData.stuPhone" placeholder="请输入电话号码" required>
       </div>
-      
       <div class="form-group">
         <label>入学时间</label>
         <input type="date" v-model="formData.stuTime" required>
       </div>
-      
       <div class="form-group">
         <label>学生状态</label>
         <select v-model="formData.stuState" required>
@@ -56,16 +47,14 @@
           <option value="毕业">毕业</option>
         </select>
       </div>
-      
       <div class="form-group">
         <label>家庭住址</label>
         <input type="text" v-model="formData.stuHome" placeholder="请输入家庭住址" required>
       </div>
-      
       <div class="form-actions">
         <button type="submit" class="btn submit-btn">
           <i class="fas fa-check"></i>
-          <span>提交</span>
+          <span>保存</span>
         </button>
         <button type="button" class="btn cancel-btn" @click="handleCancel">
           <i class="fas fa-times"></i>
@@ -77,11 +66,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 const API_BASE_URL = 'http://localhost:8080/student';
 
 const formData = ref({
@@ -93,22 +83,51 @@ const formData = ref({
   stuCollege: '',
   stuPhone: '',
   stuTime: '',
-  stuState: '在读',
+  stuState: '',
   stuHome: ''
 });
 
+onMounted(() => {
+  // 更严谨地从路由查询参数中获取学生信息，只获取期望的字段并进行类型转换等处理（假设后端要求对应的数据类型）
+  const queryParams = route.query;
+  formData.value.stuNum = queryParams.stuNum || '';
+  formData.value.stuName = queryParams.stuName || '';
+  formData.value.stuSex = queryParams.stuSex || '';
+  formData.value.stuClass = queryParams.stuClass || '';
+  formData.value.stuMajor = queryParams.stuMajor || '';
+  formData.value.stuCollege = queryParams.stuCollege || '';
+  formData.value.stuPhone = queryParams.stuPhone || '';
+  formData.value.stuTime = queryParams.stuTime || '';
+  formData.value.stuState = queryParams.stuState || '';
+  formData.value.stuHome = queryParams.stuHome || '';
+});
+
 const handleSubmit = async () => {
+  // 转换数据为服务器期望的格式（snake_case）
+  const studentInfoToUpdate = {
+    stu_num: formData.value.stuNum,
+    stu_name: formData.value.stuName,
+    stu_sex: formData.value.stuSex,
+    stu_class: formData.value.stuClass,
+    stu_major: formData.value.stuMajor,
+    stu_college: formData.value.stuCollege,
+    stu_phone: formData.value.stuPhone,
+    stu_time: formData.value.stuTime,
+    stu_state: formData.value.stuState,
+    stu_home: formData.value.stuHome
+  };
+
   try {
-    const response = await axios.post(`${API_BASE_URL}/add`, formData.value);
+    const response = await axios.put(`${API_BASE_URL}/update`, studentInfoToUpdate);
     if (response.status === 200) {
-      alert('添加成功');
+      alert('修改成功');
       router.push('/list');
     } else {
-      throw new Error('添加失败');
+      throw new Error('修改失败');
     }
   } catch (error) {
-    console.error('添加学生信息出错：', error);
-    alert(error.message || '添加失败，请稍后重试');
+    console.error('修改学生信息出错：', error);
+    alert(error.message || '修改失败，请稍后重试');
   }
 };
 
@@ -118,6 +137,7 @@ const handleCancel = () => {
 </script>
 
 <style scoped>
+/* 使用与 add.vue 相同的样式 */
 .form-container {
   background-color: white;
   padding: 2rem;
@@ -180,6 +200,11 @@ const handleCancel = () => {
   border-color: #40a9ff;
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   outline: none;
+}
+
+.form-group input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
 }
 
 .form-actions {

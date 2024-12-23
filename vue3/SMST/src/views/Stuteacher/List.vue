@@ -118,8 +118,29 @@ const fetchStudentList = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/List`);
     if (response.data && response.status === 200) {
-      studentList.value = Array.isArray(response.data) ? response.data : 
-                         Array.isArray(response.data.data) ? response.data.data : [];
+      // 转换下划线命名为驼峰命名
+      const convertData = (data) => {
+        return data.map(item => ({
+          stuNum: item.stu_num,
+          stuName: item.stu_name,
+          stuSex: item.stu_sex,
+          stuPhone: item.stu_phone,
+          stuTime: item.stu_time,
+          stuClass: item.stu_class,
+          stuMajor: item.stu_major,
+          stuCollege: item.stu_college,
+          stuState: item.stu_state,
+          stuHome: item.stu_home
+        }));
+      };
+      
+      studentList.value = Array.isArray(response.data) ? convertData(response.data) : 
+                         Array.isArray(response.data.data) ? convertData(response.data.data) : [];
+      
+      // 过滤掉无效数据（所有字段都为 null 的数据）
+      studentList.value = studentList.value.filter(student => 
+        Object.values(student).some(value => value !== null && value !== undefined)
+      );
     } else {
       console.error('获取学生信息列表失败', response);
       alert('获取学生列表失败，请稍后重试');
@@ -294,7 +315,7 @@ const getStatusText = (state) => {
 
 .student-table th {
   background-color: #fafafa;
-  padding: 14px 8px;
+  padding: 10px 8px;
   font-weight: 700;
   color: #262626;
   border-bottom: 1px solid #f0f0f0;
@@ -303,12 +324,14 @@ const getStatusText = (state) => {
 }
 
 .student-table td {
-  padding: 12px 8px;
+  padding: 0 8px;
   border-bottom: 1px solid #ebeef5;
   color: #606266;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 40px;
+  line-height: 40px;
 }
 
 .student-table tbody tr:hover {
@@ -477,6 +500,9 @@ const getStatusText = (state) => {
   height: 8px;
   border-radius: 50%;
   margin-right: 8px;
+  position: relative;
+  top: -1px;
+  vertical-align: middle;
 }
 
 .status-active {
@@ -514,11 +540,10 @@ const getStatusText = (state) => {
 
 /* 状态列的特殊样式 */
 .student-table td:nth-child(4) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 14px 4px;
+  text-align: center;
+  padding: 0 8px;
+  height: 40px;
+  line-height: 40px;
 }
 
 /* 修改表格列宽 */
@@ -536,17 +561,21 @@ const getStatusText = (state) => {
 
 /* 确保单元格内容不会溢出 */
 .student-table td {
-  padding: 12px 8px;
+  padding: 0 8px;
   border-bottom: 1px solid #ebeef5;
   color: #606266;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 40px;
+  line-height: 40px;
 }
 
 /* 确保家庭住址列的内容居中显示 */
 .student-table td:nth-child(10) {
   text-align: center;
-  padding: 14px 12px;
+  padding: 0 12px;
+  height: 40px;
+  line-height: 40px;
 }
 </style>

@@ -57,8 +57,10 @@
             <td>{{ student.stuNum }}</td>
             <td>{{ student.stuName }}</td>
             <td>
-              <span class="status-dot" :class="getStatusClass(student.stuState)"></span>
-              {{ getStatusText(student.stuState) }}
+              <div>
+                <span class="status-dot" :class="getStatusClass(student.stuState)"></span>
+                {{ getStatusText(student.stuState) }}
+              </div>
             </td>
             <td>{{ student.stuSex }}</td>
             <td>{{ student.stuClass }}</td>
@@ -139,16 +141,42 @@ onMounted(() => {
 const fetchStudentList = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/List`);
-    if (response.data && response.status === 200) {
-      studentList.value = Array.isArray(response.data) ? response.data : 
-                         Array.isArray(response.data.data) ? response.data.data : [];
+    if (response.status === 200) {
+      const data = response.data?.data || response.data || [];
+      if (!Array.isArray(data)) {
+        console.error('Invalid data format received:', data);
+        alert('获取数据格式错误');
+        return;
+      }
+
+      const convertData = (items) => {
+        return items.map(item => ({
+          stuNum: item.stu_num || item.stuNum || '',
+          stuName: item.stu_name || item.stuName || '',
+          stuSex: item.stu_sex || item.stuSex || '',
+          stuPhone: item.stu_phone || item.stuPhone || '',
+          stuTime: item.stu_time || item.stuTime || '',
+          stuClass: item.stu_class || item.stuClass || '',
+          stuMajor: item.stu_major || item.stuMajor || '',
+          stuCollege: item.stu_college || item.stuCollege || '',
+          stuState: item.stu_state || item.stuState || '在读',
+          stuHome: item.stu_home || item.stuHome || ''
+        }));
+      };
+
+      studentList.value = convertData(data).filter(student => 
+        Object.values(student).some(value => value !== null && value !== undefined && value !== '')
+      );
+
+      if (studentList.value.length === 0) {
+        console.log('No valid student data found');
+      }
     } else {
-      console.error('获取学生信息列表失败', response);
-      alert('获取学生列表失败，请稍后重试');
+      throw new Error('获取学生列表失败');
     }
   } catch (error) {
     console.error('获取学生信息列表出错：', error);
-    alert('获取数据失败���请联系管理员');
+    alert(error.message || '获取数据失败，请稍后重试');
   }
 };
 
@@ -174,23 +202,30 @@ const editStudent = (student) => {
     stuState: student.stuState?.toString() || '',
     stuHome: student.stuHome?.toString() || ''
   };
-  router.push({ 
-    name: 'update', 
+  router.push({
+    name: 'update',
     query: formattedStudent
   });
 };
 
 const deleteStudent = async (stuNum) => {
   try {
+    if (!stuNum) {
+      alert('学号不能为空');
+      return;
+    }
+
     if (!confirm('确定要删除该学生信息吗？')) {
       return;
     }
 
+    // 使用路径参数方式调用删除接口
     const response = await axios.delete(`${API_BASE_URL}/delete/${stuNum}`);
+    
     if (response.status === 200) {
       alert('删除成功');
       await fetchStudentList();
-      
+
       const maxPage = Math.ceil((studentList.value.length - 1) / pageSize.value);
       if (currentPage.value > maxPage && maxPage > 0) {
         currentPage.value = maxPage;
@@ -208,7 +243,7 @@ const handleTableRowClick = (event) => {
   if (event.target.tagName === 'BUTTON') {
     return;
   }
-  
+
   const row = event.target.closest('tr');
   if (row) {
     const studentIndex = Array.from(row.parentNode.children).indexOf(row);
@@ -238,12 +273,9 @@ watchEffect(() => {
   }
 });
 
-// 添加状态相关的方法
+// 添加状态相关方法
 const getStatusClass = (state) => {
-  console.log('Status value:', state, typeof state);
-  
   const status = String(state).trim();
-  
   switch (status) {
     case '在读':
       return 'status-active';
@@ -378,7 +410,7 @@ const getStatusText = (state) => {
 }
 
 .add-btn:hover {
-  background-color: #1a5ac0;  /* 悬停时更深 */
+  background-color: #1a5ac0;  /* 悬停时深 */
 }
 
 /* 编辑按钮 */
@@ -445,19 +477,18 @@ const getStatusText = (state) => {
   transition: all 0.2s;
   text-align: center;
   vertical-align: middle;
+  height: 60px;
 }
 
-.student-table td:nth-child(10) {
-  text-align: center;
-  padding: 14px 12px;
-}
-
+/* 修改状态列的样式 */
 .student-table td:nth-child(4) {
-  display: flex;
+  text-align: center;
+}
+
+.student-table td:nth-child(4) > div {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  padding: 14px 4px;
 }
 
 .status-dot {
@@ -466,7 +497,16 @@ const getStatusText = (state) => {
   height: 8px;
   border-radius: 50%;
   margin-right: 8px;
-  vertical-align: middle;
+}
+
+/* 确保状态文本与点对齐 */
+.student-table td:nth-child(4) span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.student-table tbody tr {
+  height: 60px; /* 统一行高 */
 }
 
 .student-table tbody tr:hover {
