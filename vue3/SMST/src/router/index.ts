@@ -11,13 +11,14 @@ import AddPage from '../views/Stuadmin/StuAdadd.vue';
 import DeletePage from '../views/Stuadmin/StuAddelete.vue';
 import UpdatePage from '../views/Stuadmin/StuAdupdate.vue';
 import ListPage from '../views/scoremanage.vue';
+import LoginView from "@/views/LoginView.vue";
 import StudentUpdatePage from '../views/StuStudent/StuStupdate.vue';
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            redirect: '/List'
+            component:LoginView
         },
         {
             path: '/List',

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
 import {useridentitystore} from '@/store/userStore'
+const userstore=useridentitystore()
 </script>
 
 <template>
