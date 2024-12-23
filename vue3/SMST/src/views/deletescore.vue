@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'http://localhost:8080/score';
 
 const formData = ref({
   studentid: '',

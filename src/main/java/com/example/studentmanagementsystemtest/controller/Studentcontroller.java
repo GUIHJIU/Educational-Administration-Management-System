@@ -47,6 +47,7 @@ public class Studentcontroller {
     public ResponseEntity<List<Student>> getStudentList() {
         try {
             // 调用服务层获取所有学生信息的方法
+            logger.info("已到达");
             List<Student> studentList = studentservice.getAllStudent();
             logger.info("成功获取到 {} 条学生信息", studentList.size());
             System.out.println(studentList);

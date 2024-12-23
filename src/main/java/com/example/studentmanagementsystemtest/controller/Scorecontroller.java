@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/score")
 public class Scorecontroller {
     private static final Logger logger = LoggerFactory.getLogger(Scorecontroller.class);
     // 注入学生服务层接口实现类，用于调用相关业务逻辑方法

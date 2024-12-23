@@ -1,27 +1,27 @@
 <template>
   <div class="form-container">
-    <h2 class="page-title">添加学生成绩</h2>
-    
+    <h2 class="page-title">更新学生成绩</h2>
+
     <form class="student-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label>学生ID</label>
         <input type="number" v-model="formData.studentid" placeholder="请输入学生ID" required>
       </div>
-      
+
       <div class="form-group">
         <label>课程ID</label>
         <input type="number" v-model="formData.courseid" placeholder="请输入课程ID" required>
       </div>
-      
+
       <div class="form-group">
         <label>成绩</label>
         <input type="number" v-model="formData.score" placeholder="请输入成绩" required>
       </div>
-      
+
       <div class="form-actions">
         <button type="submit" class="btn submit-btn">
           <i class="fas fa-check"></i>
-          <span>提交</span>
+          <span>更新</span>
         </button>
         <button type="button" class="btn cancel-btn" @click="handleCancel">
           <i class="fas fa-times"></i>
@@ -33,12 +33,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const API_BASE_URL = 'http://localhost:8080/student';
+const route = useRoute();
+const API_BASE_URL = 'http://localhost:8080/score';
 
 const formData = ref({
   studentid: '',
@@ -46,18 +47,26 @@ const formData = ref({
   score: ''
 });
 
+onMounted(() => {
+  // 从路由查询参数中获取学生成绩信息
+  const queryParams = route.query;
+  Object.keys(formData.value).forEach(key => {
+    formData.value[key] = queryParams[key] || '';
+  });
+});
+
 const handleSubmit = async () => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/add`, formData.value);
+    const response = await axios.put(`${API_BASE_URL}/update`, formData.value);
     if (response.status === 200) {
-      alert('添加成功');
+      alert('更新成功');
       router.push('/score');
     } else {
-      throw new Error('添加失败');
+      throw new Error('更新失败');
     }
   } catch (error) {
-    console.error('添加学生成绩出错：', error);
-    alert(error.message || '添加失败，请稍后重试');
+    console.error('更新学生成绩出错：', error);
+    alert(error.message || '更新失败，请稍后重试');
   }
 };
 

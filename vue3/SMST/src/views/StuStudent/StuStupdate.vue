@@ -16,23 +16,23 @@
         <div class="form-group">
           <label>电话</label>
           <input
-            type="tel"
-            v-model="formData.stuPhone"
-            placeholder="请输入电话号码"
-            required
-            class="editable-input"
-            pattern="[0-9]{11}"
-            title="请输入11位手机号码"
+              type="tel"
+              v-model="formData.stuPhone"
+              placeholder="请输入电话号码"
+              required
+              class="editable-input"
+              pattern="[0-9]{11}"
+              title="请输入11位手机号码"
           />
         </div>
         <div class="form-group">
           <label>家庭住址</label>
           <input
-            type="text"
-            v-model="formData.stuHome"
-            placeholder="请输入家庭住址"
-            required
-            class="editable-input"
+              type="text"
+              v-model="formData.stuHome"
+              placeholder="请输入家庭住址"
+              required
+              class="editable-input"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@ const isHomeValid = ref(true);
 onMounted(() => {
   const queryParams = route.query;
   for (const key in formData.value) {
-     formData.value[key] = queryParams[key as keyof typeof queryParams] as string || '';
+    formData.value[key] = queryParams[key as keyof typeof queryParams] as string || '';
     if (key ==='stuNum') {
       formData.value[key] = parseInt(queryParams[key as keyof typeof queryParams] as string) || 0;
     }
@@ -148,7 +148,7 @@ const handleCancel = () => {
 </script>
 
 <style scoped>
-/* 使用与 add.vue 相同的样式 */
+/* 使用与 StuAdadd.vue 相同的样式 */
 .form-container {
   background-color: white;
   padding: 2rem;

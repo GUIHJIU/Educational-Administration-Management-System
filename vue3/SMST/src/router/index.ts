@@ -6,22 +6,21 @@ import AllCourse from '@/views/AllCourse.vue'
 import UpdateCourse from '@/views/UpdateCourse.vue'
 import DeleteCourse from '@/views/DeleteCourse.vue'
 import SelectCourse from '@/views/SelectCourse.vue'
-import TeacherListPage from '../views/Stuadmin/List.vue';
-import AddPage from '../views/Stuadmin/add.vue';
-import DeletePage from '../views/Stuadmin/delete.vue';
-import UpdatePage from '../views/Stuadmin/update.vue';
+import TeacherListPage from '../views/Stuadmin/StuAdList.vue';
+import AddPage from '../views/Stuadmin/StuAdadd.vue';
+import DeletePage from '../views/Stuadmin/StuAddelete.vue';
+import UpdatePage from '../views/Stuadmin/StuAdupdate.vue';
 import ListPage from '../views/scoremanage.vue';
-import StudentUpdatePage from '../views/StuStudent/update.vue';
+import StudentUpdatePage from '../views/StuStudent/StuStupdate.vue';
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            redirect: '/list'
+            redirect: '/List'
         },
         {
-            path: '/list',
-            name: 'list',
+            path: '/List',
             component: TeacherListPage,
         },
         {

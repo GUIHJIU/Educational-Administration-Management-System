@@ -8,7 +8,7 @@ import {useridentitystore} from '@/store/userStore'
     <nav class="navbar">
       <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
       <RouterLink to="/coursenav" class="nav-link">课程信息管理</RouterLink>
-      <RouterLink to="/list" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/List" class="nav-link">学生学籍管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
       <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
       <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>

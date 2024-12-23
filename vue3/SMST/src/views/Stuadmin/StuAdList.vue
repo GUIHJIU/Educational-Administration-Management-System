@@ -9,10 +9,10 @@
         <div class="search-item">
           <i class="fas fa-search search-icon"></i>
           <input
-            type="text"
-            placeholder="请输入学号或姓名搜索"
-            v-model="searchKeyword"
-            @input="handleSearch"
+              type="text"
+              placeholder="请输入学号或姓名搜索"
+              v-model="searchKeyword"
+              @input="handleSearch"
           />
           <button class="btn search-btn" @click="handleSearch">
             <i class="fas fa-search"></i>
@@ -24,7 +24,7 @@
           </button>
         </div>
       </div>
-      
+
       <RouterLink class="btn add-btn" to="/add">
         <i class="fas fa-plus"></i>
         <span>新增</span>
@@ -34,52 +34,52 @@
     <div class="table-container">
       <table class="student-table">
         <thead>
-          <tr>
-            <th>序号</th>
-            <th>学号</th>
-            <th>姓名</th>
-            <th>状态</th>
-            <th>性别</th>
-            <th>班级</th>
-            <th>专业</th>
-            <th>学院</th>
-            <th>电话</th>
-            <th>家庭住址</th>
-            <th>入学时间</th>
-            <th>操作</th>
-          </tr>
+        <tr>
+          <th>序号</th>
+          <th>学号</th>
+          <th>姓名</th>
+          <th>状态</th>
+          <th>性别</th>
+          <th>班级</th>
+          <th>专业</th>
+          <th>学院</th>
+          <th>电话</th>
+          <th>家庭住址</th>
+          <th>入学时间</th>
+          <th>操作</th>
+        </tr>
         </thead>
         <tbody @click="handleTableRowClick">
-          <tr v-for="(student, index) in paginatedStudentList" 
-              :key="student.studentId" 
-              :class="{ 'selected-row': selectedStudent === student }">
-            <td>{{ index + 1 }}</td>
-            <td>{{ student.stuNum }}</td>
-            <td>{{ student.stuName }}</td>
-            <td>
-              <div>
-                <span class="status-dot" :class="getStatusClass(student.stuState)"></span>
-                {{ getStatusText(student.stuState) }}
-              </div>
-            </td>
-            <td>{{ student.stuSex }}</td>
-            <td>{{ student.stuClass }}</td>
-            <td>{{ student.stuMajor }}</td>
-            <td>{{ student.stuCollege }}</td>
-            <td>{{ student.stuPhone }}</td>
-            <td>{{ student.stuHome }}</td>
-            <td>{{ student.stuTime }}</td>
-            <td class="operation-buttons">
-              <button class="btn edit-btn" @click="editStudent(student)">
-                <i class="fas fa-edit"></i>
-                <span>编辑</span>
-              </button>
-              <button class="btn delete-btn" @click="deleteStudent(student.stuNum)">
-                <i class="fas fa-trash"></i>
-                <span>删除</span>
-              </button>
-            </td>
-          </tr>
+        <tr v-for="(student, index) in paginatedStudentList"
+            :key="student.studentId"
+            :class="{ 'selected-row': selectedStudent === student }">
+          <td>{{ index + 1 }}</td>
+          <td>{{ student.stuNum }}</td>
+          <td>{{ student.stuName }}</td>
+          <td>
+            <div>
+              <span class="status-dot" :class="getStatusClass(student.stuState)"></span>
+              {{ getStatusText(student.stuState) }}
+            </div>
+          </td>
+          <td>{{ student.stuSex }}</td>
+          <td>{{ student.stuClass }}</td>
+          <td>{{ student.stuMajor }}</td>
+          <td>{{ student.stuCollege }}</td>
+          <td>{{ student.stuPhone }}</td>
+          <td>{{ student.stuHome }}</td>
+          <td>{{ student.stuTime }}</td>
+          <td class="operation-buttons">
+            <button class="btn edit-btn" @click="editStudent(student)">
+              <i class="fas fa-edit"></i>
+              <span>编辑</span>
+            </button>
+            <button class="btn delete-btn" @click="deleteStudent(student.stuNum)">
+              <i class="fas fa-trash"></i>
+              <span>删除</span>
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -164,8 +164,8 @@ const fetchStudentList = async () => {
         }));
       };
 
-      studentList.value = convertData(data).filter(student => 
-        Object.values(student).some(value => value !== null && value !== undefined && value !== '')
+      studentList.value = convertData(data).filter(student =>
+          Object.values(student).some(value => value !== null && value !== undefined && value !== '')
       );
 
       if (studentList.value.length === 0) {
@@ -221,7 +221,7 @@ const deleteStudent = async (stuNum) => {
 
     // 使用路径参数方式调用删除接口
     const response = await axios.delete(`${API_BASE_URL}/delete/${stuNum}`);
-    
+
     if (response.status === 200) {
       alert('删除成功');
       await fetchStudentList();
@@ -368,7 +368,7 @@ const getStatusText = (state) => {
   outline: none;
 }
 
-.search-icon 
+.search-icon
 {
   position: absolute;
   left: 12px;

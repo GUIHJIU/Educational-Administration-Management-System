@@ -88,7 +88,7 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 const router = useRouter();
 
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'http://localhost:8080/score';
 
 // 计算属性
 const filteredScoreList = computed(() => {
