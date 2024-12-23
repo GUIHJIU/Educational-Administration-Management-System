@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +49,7 @@ public class Studentcontroller {
             // 调用服务层获取所有学生信息的方法
             List<Student> studentList = studentservice.getAllStudent();
             logger.info("成功获取到 {} 条学生信息", studentList.size());
+            System.out.println(studentList);
             return new ResponseEntity<>(studentList, HttpStatus.OK);
         } catch (DataAccessException e) {
             logger.error("获取学生信息列表出现数据库访问异常", e);

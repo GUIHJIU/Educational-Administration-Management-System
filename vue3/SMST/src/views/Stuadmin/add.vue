@@ -96,9 +96,9 @@ const handleSubmit = async () => {
   }
 
   if (!formData.value.stuName ||!formData.value.stuSex ||
-    !formData.value.stuClass ||!formData.value.stuMajor ||!formData.value.stuCollege ||
-    !formData.value.stuPhone ||!formData.value.stuTime ||!formData.value.stuState ||
-    !formData.value.stuHome) {
+      !formData.value.stuClass ||!formData.value.stuMajor ||!formData.value.stuCollege ||
+      !formData.value.stuPhone ||!formData.value.stuTime ||!formData.value.stuState ||
+      !formData.value.stuHome) {
     alert('请填写完整的学生信息');
     return;
   }
