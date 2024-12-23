@@ -1,7 +1,7 @@
 package com.example.studentmanagementsystemtest.mapper;
 
 
-import com.example.studentmanagementsystemtest.Entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Teacher;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

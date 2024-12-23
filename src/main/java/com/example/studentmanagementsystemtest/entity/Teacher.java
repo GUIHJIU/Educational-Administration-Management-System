@@ -1,4 +1,4 @@
-package com.example.studentmanagementsystemtest.Entity;
+package com.example.studentmanagementsystemtest.entity;
 
 import lombok.Data;
 @Data

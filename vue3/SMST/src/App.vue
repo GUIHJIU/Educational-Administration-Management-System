@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-
+import {useridentitystore} from '@/store/userStore'
 </script>
 
 <template>
   <div id="app">
     <nav class="navbar">
-      <router-link to="/user-info" class="nav-link">用户信息管理</router-link>
-      <router-link to="/course-info" class="nav-link">课程信息管理</router-link>
-      <router-link to="/List" class="nav-link">学生学籍管理</router-link>
-      <router-link to="/score" class="nav-link">成绩管理</router-link>
-      <router-link to="/course-selection" class="nav-link">选课管理</router-link>
-      <router-link to="/exam" class="nav-link">考试管理</router-link>
+      <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
+      <RouterLink to="/coursenav" class="nav-link">课程信息管理</RouterLink>
+      <RouterLink to="/list" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
+      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
+      <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
     </nav>
 
     <main class="main-content">
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <RouterView />
     </main>
   </div>
 </template>
@@ -80,7 +76,7 @@ html, body {
   transform: translateX(5px);
 }
 
-.nav-link.router-link-active {
+.nav-link.RouterLink-active {
   background-color: rgba(255, 255, 255, 0.15);
   color: #ffffff;
   font-weight: 500;

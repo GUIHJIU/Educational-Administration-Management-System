@@ -1,6 +1,6 @@
 package com.example.studentmanagementsystemtest.service;
 
-import com.example.studentmanagementsystemtest.Entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Teacher;
 
 import java.util.List;
 

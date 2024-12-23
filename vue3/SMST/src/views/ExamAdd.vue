@@ -1,28 +1,28 @@
 <template>
   <div class="form-container">
     <h2 class="page-title">添加考试信息</h2>
-    
+
     <form class="exam-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label>班级</label>
         <input type="text" v-model="formData.class_id" placeholder="请输入班级" required>
       </div>
-      
+
       <div class="form-group">
         <label>考试科目</label>
         <input type="text" v-model="formData.subjects" placeholder="请输入考试科目" required>
       </div>
-      
+
       <div class="form-group">
         <label>考试时间</label>
         <input type="datetime-local" v-model="formData.time_exam" required>
       </div>
-      
+
       <div class="form-group">
         <label>考试地点</label>
         <input type="text" v-model="formData.locations" placeholder="请输入考试地点" required>
       </div>
-      
+
       <div class="form-actions">
         <button type="submit" class="btn submit-btn">
           <i class="fas fa-check"></i>

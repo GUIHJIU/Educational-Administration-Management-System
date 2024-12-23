@@ -1,6 +1,6 @@
 package com.example.studentmanagementsystemtest.controller;
 
-import com.example.studentmanagementsystemtest.Entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Teacher;
 import com.example.studentmanagementsystemtest.service.Teacherservice;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;

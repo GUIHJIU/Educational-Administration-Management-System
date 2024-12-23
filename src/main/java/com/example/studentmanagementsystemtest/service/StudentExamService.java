@@ -1,6 +1,6 @@
 package com.example.studentmanagementsystemtest.service;
 
-import com.example.studentmanagementsystemtest.Entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Teacher;
 import com.example.studentmanagementsystemtest.mapper.StudentExamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
