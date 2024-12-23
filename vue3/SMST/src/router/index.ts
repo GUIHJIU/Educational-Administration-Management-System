@@ -10,6 +10,7 @@ import TeacherListPage from '../views/Stuadmin/List.vue';
 import AddPage from '../views/Stuadmin/add.vue';
 import DeletePage from '../views/Stuadmin/delete.vue';
 import UpdatePage from '../views/Stuadmin/update.vue';
+import ListPage from '../views/scoremanage.vue';
 import StudentUpdatePage from '../views/StuStudent/update.vue';
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -87,6 +88,11 @@ const router = createRouter({
             path: '/exam/delete/:id',
             name: 'ExamDelete',
             component: () => import('../views/ExamDelete.vue')
+        },
+        {
+            path: '/score',
+            name: 'list',
+            component: ListPage,
         },
     ],
 })
