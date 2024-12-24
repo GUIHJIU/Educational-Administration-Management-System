@@ -78,10 +78,12 @@
   </template>
   
   <script setup lang="ts">
+  import {useridentitystore} from '@/store/userStore'
+  const userstore=useridentitystore()
   import { ref, onMounted, computed, watchEffect } from 'vue';
   import axios, { AxiosError } from 'axios';
   import { useRouter } from 'vue-router';
-  import { store } from '../store/index';
+
   
   // 响应式变量声明
   interface Exam {
@@ -123,9 +125,9 @@
     return Math.ceil(filteredExamList.value.length / pageSize.value);
   });
   
-  // 生命周期钩子
+  
   onMounted(() => {
-    studentId.value = store.state.studentId;
+    studentId.value = userstore.username;
     fetchExamList();
   });
   

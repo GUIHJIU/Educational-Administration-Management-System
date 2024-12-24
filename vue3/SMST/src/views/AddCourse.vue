@@ -14,6 +14,14 @@
           <label for="courseCredits">课程学分:</label>
           <input type="number" v-model.number="course.credit" id="courseCredits" required />
         </div>
+        <div>
+          <label for="courseType">课程类型:</label>
+          <input type="text" v-model="course.courseType" id="courseType" required />
+        </div>
+        <div>
+          <label for="Teacher">课程教师:</label>
+          <input type="text" v-model="course.Teacher" id="Teacher" required />
+        </div>
         <button type="submit">添加课程</button>
       </form>
     </div>
@@ -25,7 +33,9 @@
   let course=ref({
      courseName:'',
     classHour:'',
-    credit:''
+    credit:'',
+    courseType:'',
+    Teacher:''
   })
     const addCourse=async()=> {
       if (course.value.courseName && course.value.classHour && course.value.credit) {
@@ -34,6 +44,8 @@
           course.value.courseName=''
           course.value.classHour=''
           course.value.credit=''
+          course.value.courseType=''
+          course.value.Teacher=''
           // 显示成功消息（可选）
           console.log(response.data);
           alert('课程已成功添加！');

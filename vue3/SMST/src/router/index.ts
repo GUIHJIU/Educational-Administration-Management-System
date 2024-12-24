@@ -128,7 +128,10 @@ const router = createRouter({
         {
             path: '/exam',
             name: 'exam',
-            component: () => import('../views/ExamList.vue')
+            component: () => import('../views/ExamList.vue'),
+            meta: {
+                requiresRole: ['teacher','admin'] 
+            }
         },
         {
             path: '/examAdd',
@@ -145,6 +148,14 @@ const router = createRouter({
             name: 'ExamDelete',
             component: () => import('../views/ExamDelete.vue')
         },
+        {
+            path: '/studentexam',
+            component: () => import('../views/StudentExamList.vue'),
+            meta: {
+                requiresRole: ['student']
+            }
+        },
+
         {
             path: '/score',
             name: 'list',

@@ -6,8 +6,10 @@
         <select v-model="searchBy" id="searchBy">
           <option value="courseName">课程名</option>
           <option value="courseId">课程代码</option>
-          <option value="credit">学分</option>
-          <option value="classHour">学时</option>
+          <option value="credit">课程学分</option>
+          <option value="classHour">课程学时</option>
+          <option value="courseType">课程类型</option>
+          <option value="Teacher">课程教师</option>
         </select>
       </div>
       <div>
@@ -18,7 +20,7 @@
     </form>
     <ul v-if="courseStore.courses.length">
       <li v-for="course in courseStore.courses" :key="course.courseId">
-        {{ course.courseName }}--{{ course.courseId}}--{{ course.credit}}--{{ course.classHour}}
+        {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
       </li>
     </ul>
     <p v-else>No courses found.</p>

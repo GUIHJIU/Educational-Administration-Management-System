@@ -1,27 +1,52 @@
 <template>
         <div>
-      <h1>删除课程信息</h1>
+      <h1 style="text-align: center">删除课程信息</h1>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <input
+                type="text"
+                v-model="searchQuery"
+                placeholder="搜索课程名称、教师或课程类型"
+
+            />
+          </div>
       <ul>
-        <li v-for="course in courseStore.courses" :key="course.courseId">
-            {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }}
+        <li v-for="course in filteredCourses" :key="course.courseId">
+          {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
           <button @click="courseStore.selectCourse(course.courseId)">删除</button>
         </li>
       </ul>
       <div v-if="courseStore.selectedCourse">
         <h2>选中的课程: {{ courseStore.selectedCourse.courseName }}</h2>
-        <button @click="courseStore.deleteCourse(courseStore.selectedCourse.courseId)">确认删除</button>
+        <button @click="deletecourse">确认删除</button>
       </div>
     </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted } from 'vue';
+import {onMounted, ref ,computed} from 'vue';
   import { useCourseStore } from '../store/courseStore';
-  
-  const courseStore = useCourseStore();
-  
+import router from "@/router";
+const searchQuery = ref('');
+const courseStore = useCourseStore();
+
   onMounted(() => {
     courseStore.fetchCourse();
   });
+const filteredCourses = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return courseStore.courses.filter(course => {
+    return (
+        course.Teacher.toLowerCase().includes(query) ||
+        course.courseName.toLowerCase().includes(query) || // 注意这里也应该添加 toLowerCase() 以保持一致性
+        course.courseType.toLowerCase().includes(query)
+    );
+  });
+});
+function deletecourse() {
+  courseStore.deleteCourse(courseStore.selectedCourse.courseId);
+  alert("删除成功");
+  searchQuery.value = '';
+  courseStore.selectedCourse=null
+}
 </script>
 <style scoped>
       .course-form {

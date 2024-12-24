@@ -25,7 +25,7 @@ public class StudentExamController {
     // 根据学生 ID 获取考试信息
     @GetMapping("/studentid")
     public List<Teacher> getstudentexamList(@RequestParam("studentid") Integer studentid) {
-
+            System.out.println("1");
         try {
             List<Teacher> getstudentexamList = studentExamService.getClassInfoByStudentId(studentid);
             logger.info("成功获取到 {} 条考试信息", getstudentexamList.size());

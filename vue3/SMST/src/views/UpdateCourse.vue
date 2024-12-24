@@ -1,9 +1,17 @@
 <template>
     <div>
-      <h1>修改课程信息</h1>
+      <h1 style="text-align: center">修改课程信息</h1>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="搜索课程名称、教师或课程类型"
+
+        />
+      </div>
       <ul>
-        <li v-for="course in courseStore.courses" :key="course.courseId">
-            {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }}
+        <li v-for="course in filteredCourses" :key="course.courseId">
+          {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
           <button @click="courseStore.selectCourse(course.courseId)">修改</button>
         </li>
       </ul>
@@ -17,6 +25,10 @@
             <input type="text" v-model="courseStore.selectedCourse.credit" id="credit" required />
             <label for="classhour">课程学时:</label>
             <input type="text" v-model="courseStore.selectedCourse.classHour" id="classhour" required />
+            <label for="courseType">课程类型:</label>
+            <input type="text" v-model="courseStore.selectedCourse.courseType" id="courseType" required />
+            <label for="Teacher">课程教师:</label>
+            <input type="text" v-model="courseStore.selectedCourse.Teacher" id="Teacher" required />
           </div>
           <!-- 其他课程信息的表单字段 -->
           <button type="submit">保存修改</button>
@@ -24,19 +36,33 @@
       </div>
     </div>
   </template>
-  
+
   <script lang="ts" setup>
-  import { onMounted } from 'vue';
+  import { onMounted ,ref,computed} from 'vue';
   import { useCourseStore } from '../store/courseStore';
-  
+  import router from "@/router";
+  const searchQuery = ref('');
   const courseStore = useCourseStore();
-  
+
   onMounted(() => {
     courseStore.fetchCourse();
+
   });
-  
+  const filteredCourses = computed(() => {
+    const query = searchQuery.value.toLowerCase();
+    return courseStore.courses.filter(course => {
+      return (
+          course.Teacher.toLowerCase().includes(query) ||
+          course.courseName.toLowerCase().includes(query) || // 注意这里也应该添加 toLowerCase() 以保持一致性
+          course.courseType.toLowerCase().includes(query)
+      );
+    });
+  });
   const handleSubmit = () => {
     courseStore.updateCourse();
+    alert("修改成功")
+    searchQuery.value = '';
+    courseStore.selectedCourse=null
   };
   </script>
   <style scoped>

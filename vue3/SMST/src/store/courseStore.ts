@@ -4,8 +4,8 @@ import axios from 'axios';
 export const useCourseStore = defineStore('course', {
   state() {
     return {
-      courses: [] as { courseId: number; courseName: string; credit: number; classHour: number }[],
-      selectedCourse: null as { courseId: number; courseName: string; credit: number; classHour: number } | null,
+      courses: [] as { courseId: number; courseName: string; credit: number; classHour: number;courseType:string;Teacher:string; }[],
+      selectedCourse: null as { courseId: number; courseName: string; credit: number; classHour: number ;courseType:string;Teacher:string;} | null,
     };
   },
   actions: {
@@ -14,7 +14,7 @@ export const useCourseStore = defineStore('course', {
     },
     async fetchCourse() {
       try {
-        const response = await axios.get<{ courseId: number; courseName: string; credit: number; classHour: number }[]>('http://localhost:8080/course/course');
+        const response = await axios.get<{ courseId: number; courseName: string; credit: number; classHour: number;courseType:string;Teacher:string; }[]>('http://localhost:8080/course/course');
         this.courses = response.data;
       } catch (error) {
         console.error('Failed to fetch courses:', error);
@@ -24,7 +24,7 @@ export const useCourseStore = defineStore('course', {
       if (this.selectedCourse) {
         try {
           const response = await axios.put('http://localhost:8080/course/updatecourse', this.selectedCourse);
-          this.fetchCourse();
+          await this.fetchCourse();
         } catch (error) {
           console.error('Failed to update course:', error);
         }
@@ -35,7 +35,7 @@ export const useCourseStore = defineStore('course', {
       if (this.selectedCourse) {
         try {
           const response = await axios.delete(`http://localhost:8080/course/deletecourse?courseId=${courseId}`)
-          this.fetchCourse();
+          await this.fetchCourse();
         }
         catch (error) {
           console.log('Failed to delete', error);
