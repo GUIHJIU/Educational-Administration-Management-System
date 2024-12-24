@@ -1,20 +1,24 @@
 <template>
-  <div class="login-form">
-    <h2>Login</h2>
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" v-model="username" id="username" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" id="password" required />
-      </div>
-      <button type="submit">Login</button>
-      <!-- <p v-if="errorMessage" class="error">{{ errorMessage }}</p> -->
-    </form>
+  <div class="login-container">
+    <div class="background-overlay"></div>
+    
+    <div class="login-form">
+      <h2>学生信息管理系统</h2>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="username">用户名:</label>
+          <input type="text" v-model="username" id="username" required placeholder="请输入用户名" />
+        </div>
+        <div class="form-group">
+          <label for="password">密码:</label>
+          <input type="password" v-model="password" id="password" required placeholder="请输入密码" />
+        </div>
+        <button type="submit">登录</button>
+      </form>
+    </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 
 import axios from 'axios';
@@ -58,66 +62,164 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
+/* 重置基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 确保html和body占满整个视口 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://ehall.lzjtu.edu.cn/CUS_TEMPLATE_LZJTUS/pc/img/chun.ecb0cff8.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.left-image {
+  width: 45%;
+  height: 100%;
+  background-image: url('https://ehall.lzjtu.edu.cn/CUS_TEMPLATE_LZJTUS/pc/img/chun.ecb0cff8.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.right-content {
+  width: 55%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+}
+
 .login-form {
-  position: absolute; /* 设置绝对定位 */
-  top: 50%; /* 垂直方向上移50% */
-  left: 50%; /* 水平方向上移50% */
-  transform: translate(-50%, -50%); /* 向左和向上移动自身宽度的50%，实现居中 */
-  width: 100%; /* 宽度设置为100% */
-  max-width: 400px; /* 设置最大宽度，防止在大屏幕上过宽 */
-  height: auto; /* 高度自适应内容 */
-  margin: 0; /* 移除外边距 */
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  width: 400px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(0, 0, 0, 0.1),
+    inset 0 0 15px rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 2;
+  transform: translateZ(0);
 }
 
 h2 {
   text-align: center;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  color: #555;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
 }
 
-input[type="text"],
-input[type="password"] {
+input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 
+    0 0 0 3px rgba(76, 175, 80, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 button {
   width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
+  padding: 14px;
+  background: linear-gradient(145deg, #4CAF50, #45a049);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 15px rgba(76, 175, 80, 0.3),
+    0 2px 5px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-  background-color: #45a049;
+  background: linear-gradient(145deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(76, 175, 80, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 错误消息样式 */
-.error {
-  color: red;
-  text-align: center;
-  margin-top: 10px;
+button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 2px 10px rgba(76, 175, 80, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .login-form {
+    width: 90%;
+    margin: 0 20px;
+    padding: 30px 20px;
+  }
+}
+
+/* 防止iOS safari的橡皮筋效果 */
+@supports (-webkit-touch-callout: none) {
+  .login-container {
+    position: fixed;
+  }
 }
 </style>

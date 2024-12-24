@@ -48,8 +48,6 @@ const userstore=useridentitystore()
   </div>
   <div v-else id="app">
     <nav class="navbar">
-      <RouterLink to="/home" class="nav-link">首页</RouterLink>
-
     </nav>
     <main>
       <RouterView />
@@ -69,7 +67,6 @@ html, body {
   height: 100%;
   overflow: hidden;
 }
-
 #app {
   display: flex;
   width: 100%;
@@ -82,7 +79,7 @@ html, body {
 .navbar {
   width: 220px;
   height: 100vh;
-  background: linear-gradient(180deg, #1a237e 0%, #283593 100%);
+  background: linear-gradient(180deg, #2a3397 0%, #283593 100%);
   padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
