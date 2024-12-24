@@ -1,6 +1,8 @@
 <template>
+  <h1>                                        </h1>
+  <h1>                                        </h1>
   <header>
-    <div class="wrapper">
+    <div class="wrapper" v-if="userstore.identity==='teacher'">
       <nav>
         <RouterLink to="/course/allcourse" class="nav-button">所有课程</RouterLink>
         <RouterLink to="/course/selectcourse" class="nav-button">选择课程</RouterLink>
@@ -9,12 +11,37 @@
         <RouterLink to="/course/deletecourse" class="nav-button">删除课程</RouterLink>
       </nav>
     </div>
+    <div class="wrapper" v-else-if="userstore.identity==='admin'">
+      <nav>
+        <RouterLink to="/course/allcourse" class="nav-button">所有课程</RouterLink>
+        <RouterLink to="/course/selectcourse" class="nav-button">选择课程</RouterLink>
+        <RouterLink to="/course/addcourse" class="nav-button">添加课程</RouterLink>
+        <RouterLink to="/course/updatecourse" class="nav-button">修改课程</RouterLink>
+        <RouterLink to="/course/deletecourse" class="nav-button">删除课程</RouterLink>
+      </nav>
+    </div>
+    <div class="wrapper" v-else-if="userstore.identity==='student'">
+      <nav>
+        <RouterLink to="/course/allcourse" class="nav-button">所有课程</RouterLink>
+        <RouterLink to="/course/selectcourse" class="nav-button">选择课程</RouterLink>
+<!--        <RouterLink to="/course/addcourse" class="nav-button">添加课程</RouterLink>-->
+<!--        <RouterLink to="/course/updatecourse" class="nav-button">修改课程</RouterLink>-->
+<!--        <RouterLink to="/course/deletecourse" class="nav-button">删除课程</RouterLink>-->
+      </nav>
+    </div>
+    <div class="wrapper" v-else>
+      <nav>
+        <RouterLink to="/" class="nav-button">返回登录</RouterLink>
+      </nav>
+    </div>
   </header>
 
   <RouterView />
 </template>
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import {useridentitystore} from '@/store/userStore'
+const userstore=useridentitystore()
 </script>
 <style scoped>
 header {
@@ -22,7 +49,13 @@ header {
   padding: 10px 0; /* 上下内边距，用于增加按钮与屏幕边缘的距离 */
   text-align: center; /* 文本居中，使按钮在屏幕上方居中分布 */
 }
-
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
 .wrapper {
   display: flex; /* 使用flex布局 */
   justify-content: space-around; /* 使按钮在水平方向上均匀分布 */

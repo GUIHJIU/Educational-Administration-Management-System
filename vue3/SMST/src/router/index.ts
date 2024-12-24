@@ -28,12 +28,15 @@ const router = createRouter({
         },
         {
             path:'/home',
-            component:Home
+            component:Home,
+            meta:{
+                requiresRole: ['admin','teacher','student']
+            }
         },
         {path: '/StuAdmin',
             component: AdminListPage,
             meta: {
-                requiresRole: 'admin' // 标记此路由需要超级用户角色才能访问
+                requiresRole: ['admin'] // 标记此路由需要超级用户角色才能访问
             },
         },
         {
@@ -52,14 +55,14 @@ const router = createRouter({
             path: '/TeacherList',
             component:TeacherListPage,
             meta: {
-                requiresRole: 'teacher' // 标记此路由需要教师用户角色才能访问
+                requiresRole: ['teacher'] // 标记此路由需要教师用户角色才能访问
             }
             },
         {
             path: '/StudentList',
             component: StudentListPage,
             meta: {
-                requiresRole: 'student' // 标记此路由需要普通用户角色才能访问
+                requiresRole: ['student'] // 标记此路由需要普通用户角色才能访问
             },
         },
          {
@@ -68,7 +71,10 @@ const router = createRouter({
          },
         {
             path:'/coursenav',
-            component:Course
+            component:Course,
+            meta:{
+                requiresRole: ['admin']
+            }
         },
         {
             path:'/course',
@@ -76,23 +82,38 @@ const router = createRouter({
             children:[
                 {
                     path:'addcourse',
-                    component:AddCourse
+                    component:AddCourse,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
                 },
                 {
                     path:'allcourse',
-                    component:AllCourse
+                    component:AllCourse,
+                    meta:{
+                        requiresRole:['teacher','admin','student']
+                    }
                 },
                 {
                     path:'updatecourse',
-                    component:UpdateCourse
+                    component:UpdateCourse,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
                 },
                 {
                     path:'deletecourse',
-                    component:DeleteCourse
+                    component:DeleteCourse,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
                 },
                 {
                     path:'selectcourse',
-                    component:SelectCourse
+                    component:SelectCourse,
+                    meta:{
+                        requiresRole:['teacher','admin','student']
+                    }
                 }
             ]
         },
@@ -130,7 +151,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresRole)
     {
         // 如果有角色要求，对比当前用户角色是否匹配
-        if (userRole === to.meta.requiresRole) {
+        if (Array.isArray(to.meta.requiresRole) && to.meta.requiresRole.includes(userRole)) {
             next();
         }
         else

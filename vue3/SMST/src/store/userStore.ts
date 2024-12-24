@@ -3,7 +3,7 @@ export const useridentitystore=defineStore('userStore',{
     state(){
         return {
             identity:'null',
-            account: ''
+            username:'null'
         }
     }
 })

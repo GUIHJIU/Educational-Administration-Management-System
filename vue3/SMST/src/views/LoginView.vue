@@ -44,7 +44,7 @@ const handleLogin = async () => {
     if (response.status === 200) {
       userstore.identity = response.data.position;
       // 保存用户名（学号）到 store 和 localStorage
-      userstore.account = username.value; // 使用输入的用户名作为学号
+      userstore.username= username.value; // 使用输入的用户名作为学号
       localStorage.setItem('userAccount', username.value);
 
       console.log('登录成功:', response);

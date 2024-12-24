@@ -1,10 +1,11 @@
 <template>
+  <h1>                                        </h1>
   <div class="home-container">
     <h1 class="welcome-title">欢迎登录！学生信息管理系统</h1>
     <div class="carousel-container">
       <transition-group name="fade">
-        <div 
-          v-for="(image, index) in images" 
+        <div
+          v-for="(image, index) in images"
           :key="image"
           v-show="currentIndex === index"
           class="carousel-slide"
@@ -12,8 +13,8 @@
         ></div>
       </transition-group>
       <div class="carousel-controls">
-        <div 
-          v-for="(_, index) in images" 
+        <div
+          v-for="(_, index) in images"
           :key="index"
           class="carousel-dot"
           :class="{ active: currentIndex === index }"
@@ -57,6 +58,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
 .home-container {
   width: 100%;
   height: 100vh;

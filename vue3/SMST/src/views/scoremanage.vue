@@ -1,4 +1,6 @@
 <template>
+  <h1>                                        </h1>
+  <h1>                                        </h1>
   <div class="list-container">
     <h2 class="page-title">学生成绩管理</h2>
   
@@ -369,5 +371,12 @@ watchEffect(() => {
   background-color: #f5f7fa;
   border-radius: 4px;
   color: #606266;
+}
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
 }
 </style>

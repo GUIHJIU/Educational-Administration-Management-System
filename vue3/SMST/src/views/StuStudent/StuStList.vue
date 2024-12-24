@@ -1,4 +1,6 @@
 <template>
+  <h1>                                        </h1>
+  <h1>                                        </h1>
   <div class="list-container">
     <div class="page-header">
       <h1 class="page-title">学生个人信息</h1>
@@ -360,4 +362,12 @@ const getStatusText = (state) => {
     grid-template-columns: 1fr;
   }
 }
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
 </style>

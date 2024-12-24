@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import {RouterLink, RouterView, useRouter} from 'vue-router';
 import {useridentitystore} from '@/store/userStore'
 const userstore=useridentitystore()
+const router=useRouter()
+function handleLogout(){
+  userstore.identity='null'
+  userstore.username='null'
+  router.push("/")
+}
 </script>
 <template>
+  <div id="app-container">
+  <header class="header">
+    <div class="header-content">
+      <span>{{userstore.identity}} -- {{userstore.username}}</span>
+      <button class="logout-button" @click="handleLogout">退出</button>
+    </div>
+  </header>
   <div v-if="userstore.identity === 'admin'" id="app">
     <nav class="navbar">
       <RouterLink to="/home" class="nav-link">首页</RouterLink>
@@ -48,10 +61,12 @@ const userstore=useridentitystore()
   </div>
   <div v-else id="app">
     <nav class="navbar">
+      <RouterLink to="/home" class="nav-link">首页</RouterLink>
     </nav>
     <main>
       <RouterView />
     </main>
+  </div>
   </div>
 </template>
 <style>
@@ -75,7 +90,11 @@ html, body {
   font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
   overflow: hidden;
 }
-
+#app-container {
+  height: 100%;
+  margin: 0;
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+}
 .navbar {
   width: 220px;
   height: 100vh;
@@ -126,13 +145,44 @@ html, body {
   overflow-x: hidden;
   background-color: #f5f7fa;
 }
+.header {
+  position: fixed;
+  top: 0;
+  left: 0; /* 可选，通常用于确保header从左边缘开始 */
+  right: 0; /* 可选，用于确保header横跨整个页面宽度 */
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; /* 修正为center以实现垂直居中，如果内容高度一致 */
+  padding: 10px 20px;
+  width: 100%; /* 实际上，当left和right都设置为0时，width不是必需的 */
+  z-index: 1000; /* 可选，用于确保header位于其他内容之上 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 可选，为header添加阴影以增加深度感 */
+}
 
+.header-content {
+  display: flex; /* 确保内部元素（文字和按钮）也是flex布局 */
+  align-items: center; /* 内部元素垂直居中 */
+}
 /* 添加过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
+.logout-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #d9d9d9;
+  color: #0d5db9;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
 
+.logout-button:hover {
+  background-color: #c0c0c0;
+}
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

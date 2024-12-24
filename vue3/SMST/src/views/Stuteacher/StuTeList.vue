@@ -1,4 +1,6 @@
 <template>
+  <h1>                                        </h1>
+  <h1>                                        </h1>
   <div class="list-container">
     <div class="page-header">
       <h1 class="page-title">学生学籍信息管理</h1>
@@ -578,4 +580,12 @@ const getStatusText = (state) => {
   height: 40px;
   line-height: 40px;
 }
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
 </style>

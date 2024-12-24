@@ -1,4 +1,6 @@
 <template>
+  <h1>                                        </h1>
+  <h1>                                        </h1>
     <div class="list-container">
       <h2 class="page-title">考试信息列表</h2>
       
@@ -517,5 +519,12 @@
     padding: 14px 20px;
     width: 270px;
     position: relative;
+  }
+  h1{
+    background-color: #0d5db9;
+    color: #d9d9d9;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
   }
   </style>

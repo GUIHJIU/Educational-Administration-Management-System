@@ -75,7 +75,13 @@ const handleCancel = () => {
   max-width: 800px;
   margin: 2rem auto;
 }
-
+h1{
+  background-color: #0d5db9;
+  color: #d9d9d9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
 .page-title {
   color: #262626;
   font-size: 24px;
