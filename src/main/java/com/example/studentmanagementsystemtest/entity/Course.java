@@ -8,4 +8,6 @@ public class Course {
     public String courseName;
     public int credit;
     public int classHour;
+    public String courseType;
+    public String Teacher;
 }

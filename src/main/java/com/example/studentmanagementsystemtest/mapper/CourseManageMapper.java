@@ -11,7 +11,7 @@ public interface CourseManageMapper {
     List< Course > selectAllCourse();
     @Select("select * from course where ${queryType} = #{queryParam}")
     List<Course> searchCourse(String queryType,String queryParam);
-    @Insert("INSERT INTO course (courseName, credit, classHour) VALUES ( #{courseName}, #{credit}, #{classHour})")
+    @Insert("INSERT INTO course (courseName, credit, classHour,courseType,Teacher) VALUES ( #{courseName}, #{credit}, #{classHour}, #{courseType}, #{Teacher})")
     void insertCourse(Course course);
     @Update({
             "<script>",
@@ -20,6 +20,8 @@ public interface CourseManageMapper {
             "<if test='course.courseName != null'>courseName = #{course.courseName},</if>",
             "<if test='course.credit != null'>credit = #{course.credit},</if>",
             "<if test='course.classHour != null'>classHour = #{course.classHour},</if>",
+            "<if test='course.courseType != null'>courseType = #{course.courseType},</if>",
+            "<if test='course.Teacher != null'>Teacher = #{course.Teacher},</if>",
             "</set>",
             "WHERE courseId = #{course.courseId}",
             "</script>"
