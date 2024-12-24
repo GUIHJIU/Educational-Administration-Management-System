@@ -1,14 +1,42 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-// import {useridentitystore} from '@/store/userStore'
-// const userstore=useridentitystore()
+import {useridentitystore} from '@/store/userStore'
+const userstore=useridentitystore()
 </script>
-
 <template>
-  <div id="app">
+  <div v-if="userstore.identity === 'admin'" id="app">
     <nav class="navbar">
+      <RouterLink to="/home" class="nav-link">首页</RouterLink>
       <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
-      <RouterLink to="/coursenav" class="nav-link">课程信息管理</RouterLink>
+      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
+      <RouterLink to="/StuAdmin" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
+      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
+      <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
+    </nav>
+    <main class="main-content">
+      <RouterView />
+    </main>
+  </div>
+  <div v-else-if="userstore.identity === 'teacher'" id="app">
+    <nav class="navbar">
+      <RouterLink to="/home" class="nav-link">首页</RouterLink>
+      <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
+      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
+      <RouterLink to="/TeacherList" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
+      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
+      <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
+    </nav>
+    <main class="main-content">
+      <RouterView />
+    </main>
+  </div>
+  <div v-else-if="userstore.identity === 'student'" id="app">
+    <nav class="navbar">
+      <RouterLink to="/home" class="nav-link">首页</RouterLink>
+      <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
+      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/StudentList" class="nav-link">学生学籍管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
       <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
@@ -18,8 +46,16 @@ import { RouterLink, RouterView } from 'vue-router';
       <RouterView />
     </main>
   </div>
-</template>
+  <div v-else id="app">
+    <nav class="navbar">
+      <RouterLink to="/home" class="nav-link">首页</RouterLink>
 
+    </nav>
+    <main>
+      <RouterView />
+    </main>
+  </div>
+</template>
 <style>
 * {
   margin: 0;

@@ -13,7 +13,7 @@ import StuAddPage from '../views/Stuadmin/StuAdadd.vue';
 import StuDeletePage from '../views/Stuadmin/StuAddelete.vue';
 import StuUpdatePage1 from '../views/Stuadmin/StuAdupdate.vue';
 import StuUpdatePage2 from '../views/StuStudent/StuStupdate.vue';
-
+import Home from "@/views/Home.vue";
 import ListPage from '../views/scoremanage.vue';
 import LoginPage from "@/views/LoginView.vue";
 import {useridentitystore} from '@/store/userStore'
@@ -24,10 +24,13 @@ const router = createRouter({
         {
             path: '/',
             component: LoginPage,
-            
+
         },
         {
-            path: '/StuAdmin',
+            path:'/home',
+            component:Home
+        },
+        {path: '/StuAdmin',
             component: AdminListPage,
             meta: {
                 requiresRole: 'admin' // 标记此路由需要超级用户角色才能访问
@@ -47,11 +50,11 @@ const router = createRouter({
         },
         {
             path: '/TeacherList',
-            component: TeacherListPage,
+            component:TeacherListPage,
             meta: {
                 requiresRole: 'teacher' // 标记此路由需要教师用户角色才能访问
             }
-        },
+            },
         {
             path: '/StudentList',
             component: StudentListPage,

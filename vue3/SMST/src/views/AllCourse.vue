@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Course List</h1>
+        <h1>课程列表</h1>
         <ul>
             
             <li v-for="item in CourseList" :key="item.courseId">

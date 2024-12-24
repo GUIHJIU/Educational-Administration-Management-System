@@ -20,13 +20,11 @@
 import axios from 'axios';
 import { ref,  reactive } from 'vue';
 import { useRouter } from 'vue-router';
-
-const router = useRouter();
 import {useridentitystore} from '@/store/userStore'
-
 const userstore=useridentitystore()
 const username=ref('');
 const password=ref('');
+const router = useRouter();
 const user=reactive({
   username:'',
   position:''
@@ -47,9 +45,9 @@ const handleLogin = async () => {
 
       console.log('登录成功:', response);
       console.log('保存的账号:', username.value);
-      
+
       alert("登录成功");
-      router.push('/course');
+      router.push('/home');
     }
   } catch (error) {
     console.error('登录失败:', error);
