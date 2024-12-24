@@ -16,11 +16,14 @@
   </div>
 </template>
 <script lang="ts" setup>
+
 import axios from 'axios';
 import { ref,  reactive } from 'vue';
-import router from "@/router";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 import {useridentitystore} from '@/store/userStore'
-import {storeToRefs} from 'pinia'
+
 const userstore=useridentitystore()
 const username=ref('');
 const password=ref('');
@@ -36,14 +39,21 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    userstore.identity=response.data.position
-    // 根据后端响应处理逻辑
-    console.log('登录成功:', response);
-    alert("登录成功")
+    if (response.status === 200) {
+      userstore.identity = response.data.position;
+      // 保存用户名（学号）到 store 和 localStorage
+      userstore.account = username.value; // 使用输入的用户名作为学号
+      localStorage.setItem('userAccount', username.value);
+
+      console.log('登录成功:', response);
+      console.log('保存的账号:', username.value);
+      
+      alert("登录成功");
+      router.push('/course');
+    }
   } catch (error) {
-    // 处理请求错误
     console.error('登录失败:', error);
-    // 这里可以显示错误消息等
+    alert('登录失败，请检查用户名和密码');
   }
 };
 

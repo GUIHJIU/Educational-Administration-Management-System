@@ -25,10 +25,7 @@
         </div>
       </div>
 
-      <RouterLink class="btn add-btn" to="/add">
-        <i class="fas fa-plus"></i>
-        <span>新增</span>
-      </RouterLink>
+      <RouterLink class="btn add-btn" to="/StuAdmin/StuAdadd">新增</RouterLink>
     </div>
 
     <div class="table-container">
@@ -91,7 +88,10 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
       <button @click="nextPage" :disabled="currentPage === totalPages">尾页</button>
     </div>
+
+    <router-view></router-view>
   </div>
+
 </template>
 
 <script setup>
@@ -203,10 +203,11 @@ const editStudent = (student) => {
     stuHome: student.stuHome?.toString() || ''
   };
   router.push({
-    name: 'update',
+    path: '/StuAdmin/StuAdupdate',
     query: formattedStudent
   });
 };
+
 
 const deleteStudent = async (stuNum) => {
   try {

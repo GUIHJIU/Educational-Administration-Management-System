@@ -63,6 +63,7 @@
       </div>
     </form>
   </div>
+
 </template>
 
 <script setup>
@@ -121,7 +122,7 @@ const handleSubmit = async () => {
     const response = await axios.post(`${API_BASE_URL}/add`, studentInfoToSend);
     if (response.status === 200) {
       alert('添加成功');
-      router.push('/list');
+      router.push('/StuAdmin');
     } else {
       throw new Error('添加失败');
     }
@@ -132,7 +133,7 @@ const handleSubmit = async () => {
 };
 
 const handleCancel = () => {
-  router.push('/list');
+  router.push('/StuAdmin');
 };
 </script>
 

@@ -1,358 +1,363 @@
 <template>
   <div class="list-container">
     <div class="page-header">
-      <h1 class="page-title">学生信息查询</h1>
+      <h1 class="page-title">学生个人信息</h1>
     </div>
 
-    <div class="search-container">
-      <div class="search-box">
-        <input
-            type="text"
-            v-model="stuNum"
-            placeholder="请输入学号"
-            @keyup.enter="searchStudent"
-        />
-        <button class="search-btn" @click="searchStudent">查询</button>
-      </div>
-    </div>
+    <div class="content-wrapper">
+      <div class="info-card" v-if="studentInfo">
+        <div class="info-header">
+          <div class="student-basic">
+            <h2>{{ studentInfo.stuName }}</h2>
+            <div class="status-badge" :class="getStatusClass(studentInfo.stuState)">
+              {{ getStatusText(studentInfo.stuState) }}
+            </div>
+          </div>
+          <button class="btn edit-btn" @click="editStudent(studentInfo)">
+            <i class="fas fa-edit"></i>
+            <span>编辑信息</span>
+          </button>
+        </div>
 
-    <!-- 学生信息显示区域 -->
-    <div v-if="studentData" class="info-container">
-      <h2>学生信息</h2>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>学号:</label>
-          <span class="info-value">{{ studentData.stuNum }}</span>
-        </div>
-        <div class="info-item">
-          <label>姓名:</label>
-          <span class="info-value">{{ studentData.stuName }}</span>
-        </div>
-        <div class="info-item">
-          <label>性别:</label>
-          <span class="info-value">{{ studentData.stuSex }}</span>
-        </div>
-        <div class="info-item">
-          <label>班级:</label>
-          <span class="info-value">{{ studentData.stuClass }}</span>
-        </div>
-        <div class="info-item">
-          <label>专业:</label>
-          <span class="info-value">{{ studentData.stuMajor }}</span>
-        </div>
-        <div class="info-item">
-          <label>学院:</label>
-          <span class="info-value">{{ studentData.stuCollege }}</span>
-        </div>
-        <div class="info-item">
-          <label>状态:</label>
-          <span class="info-value">{{ studentData.stuState }}</span>
-        </div>
-        <div class="info-item">
-          <label>入学时间:</label>
-          <span class="info-value">{{ studentData.stuTime }}</span>
-        </div>
-        <div class="info-item">
-          <label>电话:</label>
-          <span class="info-value">{{ studentData.stuPhone }}</span>
-        </div>
-        <div class="info-item">
-          <label>家庭住址:</label>
-          <span class="info-value">{{ studentData.stuHome }}</span>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>学号</label>
+            <span>{{ studentInfo.stuNum }}</span>
+          </div>
+          <div class="info-item">
+            <label>性别</label>
+            <span>{{ studentInfo.stuSex }}</span>
+          </div>
+          <div class="info-item">
+            <label>班级</label>
+            <span>{{ studentInfo.stuClass }}</span>
+          </div>
+          <div class="info-item">
+            <label>专业</label>
+            <span>{{ studentInfo.stuMajor }}</span>
+          </div>
+          <div class="info-item">
+            <label>学院</label>
+            <span>{{ studentInfo.stuCollege }}</span>
+          </div>
+          <div class="info-item">
+            <label>电话</label>
+            <span>{{ studentInfo.stuPhone }}</span>
+          </div>
+          <div class="info-item">
+            <label>入学时间</label>
+            <span>{{ studentInfo.stuTime }}</span>
+          </div>
+          <div class="info-item full-width">
+            <label>家庭住址</label>
+            <span>{{ studentInfo.stuHome }}</span>
+          </div>
         </div>
       </div>
-
-      <div class="actions">
-        <button class="update-btn" @click="goToUpdate">修改信息</button>
+      <div v-else class="loading">
+        <div class="loading-spinner"></div>
+        <span>加载中...</span>
       </div>
-    </div>
-
-    <div v-else-if="searched" class="no-result">
-      未找到该学号的学生信息
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useridentitystore } from '@/store/userStore';
 
+const studentInfo = ref(null);
 const router = useRouter();
+const userStore = useridentitystore();
 
-// 定义学生信息接口类型，明确各属性的类型
-interface StudentInfo {
-  stuNum: number;
-  stuName: string;
-  stuSex: string;
-  stuPhone: string;
-  stuTime: string;
-  stuClass: string;
-  stuMajor: string;
-  stuCollege: string;
-  stuState: string;
-  stuHome: string;
-}
-
-// 用于将下划线命名属性转换为驼峰命名的函数
-function convertToCamelCase(obj: any): any {
-  if (typeof obj!== 'object' || obj === null) {
-    return obj;
-  }
-  if (Array.isArray(obj)) {
-    return obj.map((item) => convertToCamelCase(item));
-  }
-  const result: any = {};
-  for (const key in obj) {
-    const newKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
-    result[newKey] = convertToCamelCase(obj[key]);
-  }
-  return result;
-}
-
-// 用于绑定输入框中学号值的响应式数据
-const stuNum = ref('');
-// 存储后端返回的学生信息的响应式数据，初始值为null
-const studentData = ref<StudentInfo | null>(null);
-// 标记是否已经进行了查询操作，初始值为false
-const searched = ref(false);
-// 后端接口的基础URL，假设本地服务端运行在8080端口且学生信息相关接口前缀为/student
 const API_BASE_URL = 'http://localhost:8080/student';
 
-// 发起查询学生信息的函数
-const searchStudent = async () => {
-  // 去除输入学号前后的空白字符
-  const inputStuNum = stuNum.value.trim();
-  if (inputStuNum === '')
-  {
-    // 如果学号为空，给出更友好的提示
-    alert('请输入学号后再进行查询操作哦~');
-    return;
-  }
+// 生命周期钩子
+onMounted(() => {
+  fetchStudentInfo();
+});
 
-  let numericStuNum: number;
+// 方法定义
+const fetchStudentInfo = async () => {
   try {
-    numericStuNum = parseInt(inputStuNum);
-    if (isNaN(numericStuNum)) {
-      // 如果转换学号为数字失败，提示输入有效的数字学号
-      alert('请输入有效的数字学号呀');
-      return;
+    // 使用store中保存的账号（学号）获取学生信息
+    const stuNum = userStore.account;
+    console.log('Current student number:', stuNum); // 调试日志
+
+    // 如果没有学号，尝试从localStorage获取
+    if (!stuNum) {
+      const savedAccount = localStorage.getItem('userAccount');
+      if (savedAccount) {
+        userStore.account = savedAccount;
+        console.log('Retrieved account from localStorage:', savedAccount);
+      } else {
+        console.error('No student number found in store or localStorage');
+        alert('未找到学号信息，请重新登录');
+        router.push('/'); // 重定向到登录页
+        return;
+      }
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/List`);
+    
+    if (response.status === 200) {
+      let data = response.data?.data || response.data || [];
+      console.log('Received data:', data); // 调试日志
+
+      // 在列表中查找匹配的学生
+      const studentData = data.find(item => {
+        const itemNum = String(item.stu_num || '').trim();
+        const searchNum = String(userStore.account).trim();
+        console.log('Comparing:', itemNum, 'with', searchNum); // 调试日志
+        // 使用相等比较，确保学号完全匹配
+        return itemNum === searchNum;
+      });
+
+      if (!studentData) {
+        console.error('Student not found for number:', userStore.account);
+        alert('未找到学生信息，请确认学号是否正确');
+        return;
+      }
+
+      // 转换数据格式
+      studentInfo.value = {
+        stuNum: studentData.stu_num || '',
+        stuName: studentData.stu_name || '',
+        stuSex: studentData.stu_sex || '',
+        stuPhone: studentData.stu_phone || '',
+        stuTime: studentData.stu_time || '',
+        stuClass: studentData.stu_class || '',
+        stuMajor: studentData.stu_major || '',
+        stuCollege: studentData.stu_college || '',
+        stuState: studentData.stu_state || '在读',
+        stuHome: studentData.stu_home || ''
+      };
+    } else {
+      throw new Error('获取学生信息失败');
     }
   } catch (error) {
-    console.error('转换学号为数字时出错:', error);
-    alert('学号格式出现问题，请检查后重新输入');
-    return;
-  }
-
-  const url = `${API_BASE_URL}/search/${numericStuNum}`;
-  console.log('发送请求到:', url);
-
-  try {
-    const response = await axios.get(url);
-    console.log('服务器响应:', response);
-
-    if (response.status === 200 && response.data) {
-      const responseData = convertToCamelCase(response.data);
-      // 对学号等关键属性进行类型校验和转换
-      let convertedStuNum: number;
-      try {
-        convertedStuNum = parseInt(responseData.stuNum);
-        responseData.stuNum = convertedStuNum;
-      } catch (error)
-      {
-        console.error('学号类型转换错误:', error);
-        // 可以根据情况进行相应处理，比如提示用户数据异常等
-      }
-      studentData.value = responseData;
-      searched.value = true;
-      console.log('获取到的学生数据:', studentData.value);
-    } else
-    {
-      studentData.value = null;
-      searched.value = true;
-      // 更明确的提示未找到对应学号学生的信息
-      alert('很抱歉，未找到该学号对应的学生信息哦，请确认学号是否正确');
-    }
-  } catch (error: any) {
-    console.error('查询失败:', error);
-    studentData.value = null;
-    searched.value = true;
-    if (error.response?.status === 404) {
-      alert('未找到该学号对应的学生信息呢，你可以检查下学号是否输错啦');
-    } else {
-      alert('查询出现意外错误，请稍后重试或联系管理员哦');
-    }
+    console.error('获取学生信息出错：', error);
+    alert('获取数据失败，请稍后重试');
   }
 };
 
-// 跳转到修改信息页面的函数
-const goToUpdate = () => {
-  if (!studentData.value || typeof studentData.value.stuNum === 'undefined') {
-    alert('请先查询到学生信息后，再点击修改信息按钮哦');
-    return;
+const editStudent = (student) => {
+  const formattedStudent = {
+    stuNum: student.stuNum?.toString() || '',
+    stuName: student.stuName?.toString() || '',
+    stuSex: student.stuSex?.toString() || '',
+    stuClass: student.stuClass?.toString() || '',
+    stuMajor: student.stuMajor?.toString() || '',
+    stuCollege: student.stuCollege?.toString() || '',
+    stuPhone: student.stuPhone?.toString() || '',
+    stuTime: student.stuTime?.toString() || '',
+    stuState: student.stuState?.toString() || '',
+    stuHome: student.stuHome?.toString() || ''
+  };
+  router.push({
+    path: '/StudentList/Stuupdate',
+    query: formattedStudent
+  });
+};
+
+// 状态相关方法
+const getStatusClass = (state) => {
+  const status = String(state).trim();
+  switch (status) {
+    case '在读':
+      return 'status-active';
+    case '休学':
+      return 'status-warning';
+    case '退学':
+      return 'status-inactive';
+    case '毕业':
+      return 'status-graduate';
+    default:
+      return 'status-unknown';
   }
+};
 
-  try {
-    // 使用 String() 函数安全地转换数字，并处理各属性可能为空的情况
-    const queryParams: Record<string, string> = {
-      stuNum: String(studentData.value.stuNum),
-      stuName: String(studentData.value.stuName || ''),
-      stuSex: String(studentData.value.stuSex || ''),
-      stuPhone: String(studentData.value.stuPhone || ''),
-      stuTime: String(studentData.value.stuTime || ''),
-      stuClass: String(studentData.value.stuClass || ''),
-      stuMajor: String(studentData.value.stuMajor || ''),
-      stuCollege: String(studentData.value.stuCollege || ''),
-      stuState: String(studentData.value.stuState || ''),
-      stuHome: String(studentData.value.stuHome || '')
-    };
-
-    console.log('跳转参数:', queryParams);
-
-    // 使用正确的路由路径，跳转到修改信息页面并传递参数
-    router.push({
-      path: '/update',
-      query: queryParams
-    });
-  } catch (error) {
-    console.error('导航错误:', error);
-    alert('哎呀，页面跳转出现问题了，请重试一下哦');
-  }
+const getStatusText = (state) => {
+  if (!state) return '未���';
+  return String(state).trim();
 };
 </script>
 
 <style scoped>
 .list-container {
-  padding: 24px;
   background-color: #f8fafc;
   min-height: 100vh;
-  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  padding: 0;
 }
 
 .page-header {
-  background: #1277d6;
-  padding: 24px;
-  margin: -24px -24px 24px -24px;
-  text-align: center;
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  padding: 32px 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .page-title {
   color: white;
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold;
-}
-
-.search-container {
-  max-width: 600px;
-  margin: 32px auto;
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.search-box {
-  display: flex;
-  gap: 12px;
-}
-
-.search-box input {
-  flex: 1;
-  padding: 8px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-.search-btn {
-  padding: 8px 24px;
-  background: #1277d6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.info-container {
-  max-width: 800px;
-  margin: 32px auto;
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.info-container h2 {
+  font-size: 28px;
+  font-weight: 600;
   text-align: center;
-  margin-bottom: 24px;
-  color: #1277d6;
-  font-size: 20px;
-  font-weight: bold;
+  margin: 0;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.info-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.student-basic {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.student-basic h2 {
+  font-size: 24px;
+  color: #1e293b;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-inactive {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-graduate {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.edit-btn {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 0 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
 }
 
 .info-item {
   display: flex;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-item.full-width {
+  grid-column: 1 / -1;
 }
 
 .info-item label {
-  width: 90px;
-  color: #666;
-  font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
 }
 
-.info-value {
-  flex: 1;
-  color: #000;
-  font-weight: bold;
-  font-size: 15px;
-  margin-left: 10px;
-}
-
-.actions {
-  margin-top: 32px;
-  text-align: center;
-}
-
-.update-btn {
-  padding: 10px 40px;
-  background: #1277d6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.info-item span {
   font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  color: #1e293b;
+  font-weight: 400;
 }
 
-.update-btn:hover {
-  background: #0d5db9;
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 16px;
 }
 
-.no-result {
-  text-align: center;
-  color: #666;
-  padding: 40px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: 32px auto;
-  font-size: 16px;
-  font-weight: bold;
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .info-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .edit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

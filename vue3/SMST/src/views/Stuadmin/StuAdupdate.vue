@@ -121,7 +121,7 @@ const handleSubmit = async () => {
     const response = await axios.put(`${API_BASE_URL}/update`, studentInfoToUpdate);
     if (response.status === 200) {
       alert('修改成功');
-      router.push('/list');
+      router.push('/StuAdmin');
     } else {
       throw new Error('修改失败');
     }
@@ -132,7 +132,7 @@ const handleSubmit = async () => {
 };
 
 const handleCancel = () => {
-  router.push('/list');
+  router.push('/StuAdmin');
 };
 </script>
 

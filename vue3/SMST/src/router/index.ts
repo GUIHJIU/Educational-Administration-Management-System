@@ -6,39 +6,63 @@ import AllCourse from '@/views/AllCourse.vue'
 import UpdateCourse from '@/views/UpdateCourse.vue'
 import DeleteCourse from '@/views/DeleteCourse.vue'
 import SelectCourse from '@/views/SelectCourse.vue'
-import TeacherListPage from '../views/Stuadmin/StuAdList.vue';
-import AddPage from '../views/Stuadmin/StuAdadd.vue';
-import DeletePage from '../views/Stuadmin/StuAddelete.vue';
-import UpdatePage from '../views/Stuadmin/StuAdupdate.vue';
+import TeacherListPage from '../views/Stuteacher/StuTeList.vue';
+import AdminListPage from '../views/Stuadmin/StuAdList.vue';
+import StudentListPage from '../views/StuStudent/StuStList.vue';
+import StuAddPage from '../views/Stuadmin/StuAdadd.vue';
+import StuDeletePage from '../views/Stuadmin/StuAddelete.vue';
+import StuUpdatePage1 from '../views/Stuadmin/StuAdupdate.vue';
+import StuUpdatePage2 from '../views/StuStudent/StuStupdate.vue';
+
 import ListPage from '../views/scoremanage.vue';
-import LoginView from "@/views/LoginView.vue";
-import StudentUpdatePage from '../views/StuStudent/StuStupdate.vue';
+import LoginPage from "@/views/LoginView.vue";
+import {useridentitystore} from '@/store/userStore'
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            component:LoginView
+            component: LoginPage,
+            
         },
         {
-            path: '/List',
+            path: '/StuAdmin',
+            component: AdminListPage,
+            meta: {
+                requiresRole: 'admin' // 标记此路由需要超级用户角色才能访问
+            },
+        },
+        {
+            path: '/StuAdmin/StuAdadd',
+            component: StuAddPage
+        },
+        {
+            path: '/StuAdmin/StuAdupdate',
+            component: StuUpdatePage1
+        },
+        {
+            path: '/StuAdmin/StuAddelete',
+            component: StuDeletePage
+        },
+        {
+            path: '/TeacherList',
             component: TeacherListPage,
+            meta: {
+                requiresRole: 'teacher' // 标记此路由需要教师用户角色才能访问
+            }
         },
         {
-            path: '/add',
-            name: 'add',
-            component: AddPage,
+            path: '/StudentList',
+            component: StudentListPage,
+            meta: {
+                requiresRole: 'student' // 标记此路由需要普通用户角色才能访问
+            },
         },
-        {
-            path: '/delete',
-            name: 'delete',
-            component: DeletePage,
-        },
-        {
-            path: '/update',
-            name: 'update',
-            component: UpdatePage,
-        },
+         {
+                    path:'/StudentList/Stuupdate',
+                    component:StuUpdatePage2
+         },
         {
             path:'/coursenav',
             component:Course
@@ -96,5 +120,26 @@ const router = createRouter({
         },
     ],
 })
+
+router.beforeEach((to, from, next) => {
+    const userstore=useridentitystore()
+    const userRole = userstore.identity;
+    if (to.meta.requiresRole)
+    {
+        // 如果有角色要求，对比当前用户角色是否匹配
+        if (userRole === to.meta.requiresRole) {
+            next();
+        }
+        else
+        {
+            // 角色不匹配，跳转到登录页或者其他提示页面，这里跳转到登录页
+            next("/");
+        }
+    }
+    else {
+        console.log('因角色不匹配，跳转到登录页');
+        next(); // 添加这一行，放行没有角色要求的路由
+    }
+});
 export default router
 

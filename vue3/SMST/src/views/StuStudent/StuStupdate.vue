@@ -84,7 +84,8 @@ const isHomeValid = ref(true);
 
 onMounted(() => {
   const queryParams = route.query;
-  for (const key in formData.value) {
+  for (const key in formData.value)
+  {
     formData.value[key] = queryParams[key as keyof typeof queryParams] as string || '';
     if (key ==='stuNum') {
       formData.value[key] = parseInt(queryParams[key as keyof typeof queryParams] as string) || 0;
@@ -120,7 +121,7 @@ const handleSubmit = async () => {
     console.log('服务器响应:', response);
     if (response.status === 200) {
       alert('更新成功！');
-      router.push('/list');
+      router.push('/StudentList');
     } else {
       alert('更新失败：服务器返回未知状态');
     }
@@ -143,7 +144,7 @@ const handleSubmit = async () => {
 };
 
 const handleCancel = () => {
-  router.push('/list');
+  router.push('/StudentList');
 };
 </script>
 
