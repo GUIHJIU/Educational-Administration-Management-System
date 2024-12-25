@@ -6,7 +6,7 @@
   
     <div class="top-actions">
       <div class="search-container">
-        <div class="search-item">
+        <div v-if="userStore.identity === 'teacher'" class="search-item">
           <i class="fas fa-search search-icon"></i>
           <input
             type="text"
@@ -31,15 +31,15 @@
       </div>
   
       <div class="button-group">
-        <RouterLink class="btn add-btn" to="/add">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn add-btn" to="/add">
           <i class="fas fa-plus"></i>
           <span>添加</span>
         </RouterLink>
-        <RouterLink class="btn edit-btn" to="/update">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn edit-btn" to="/update">
           <i class="fas fa-edit"></i>
           <span>编辑</span>
         </RouterLink>
-        <RouterLink class="btn delete-btn" to="/delete">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn delete-btn" to="/delete">
           <i class="fas fa-trash"></i>
           <span>删除</span>
         </RouterLink>
@@ -54,14 +54,20 @@
             <th>学生ID</th>
             <th>课程ID</th>
             <th>成绩</th>
+            <th>
+              <button class="btn sort-btn" @click="sortScores">
+                <i class="fas fa-sort-amount-up"></i>
+                <span>排序</span>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(score, index) in paginatedScoreList" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ scoremanage.studentid }}</td>
-            <td>{{ scoremanage.courseid }}</td>
-            <td>{{ scoremanage.score }}</td>
+            <td>{{ score.studentid }}</td>
+            <td>{{ score.courseid }}</td>
+            <td>{{ score.score }}</td>
           </tr>
         </tbody>
       </table>
@@ -81,6 +87,7 @@
 import { ref, onMounted, computed, watchEffect } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useridentitystore } from '@/store/userStore'; // 假设你有一个 userStore 模块
 
 // 响应式变量声明
 const scoreList = ref([]);
@@ -89,8 +96,12 @@ const courseid = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
 const router = useRouter();
+const userStore = useridentitystore();
 
 const API_BASE_URL = 'http://localhost:8080/score';
+
+// 控制是否排序的变量
+const isSorted = ref(false);
 
 // 计算属性
 const filteredScoreList = computed(() => {
@@ -98,19 +109,26 @@ const filteredScoreList = computed(() => {
     return scoreList.value;
   }
   return scoreList.value.filter(score => {
-    return scoremanage.studentid.toString().includes(studentid.value) &&
-           scoremanage.courseid.toString().includes(courseid.value);
+    return score.studentid.toString().includes(studentid.value) &&
+    score.courseid.toString().includes(courseid.value);
   });
+});
+
+const sortedScoreList = computed(() => {
+  if (isSorted.value) {
+    return [...filteredScoreList.value].sort((a, b) => b.score - a.score);
+  }
+  return filteredScoreList.value;
 });
 
 const paginatedScoreList = computed(() => {
   const startIndex = (currentPage.value - 1) * pageSize.value;
   const endIndex = startIndex + pageSize.value;
-  return filteredScoreList.value.slice(startIndex, endIndex);
+  return sortedScoreList.value.slice(startIndex, endIndex);
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(filteredScoreList.value.length / pageSize.value);
+  return Math.ceil(sortedScoreList.value.length / pageSize.value);
 });
 
 // 生命周期钩子
@@ -125,6 +143,10 @@ const fetchScoreList = async () => {
     if (response.data && response.status === 200) {
       scoreList.value = Array.isArray(response.data) ? response.data :
                         Array.isArray(response.data.data) ? response.data.data : [];
+      // 根据用户身份过滤成绩列表
+      if (userStore.identity === 'student') {
+        scoreList.value = scoreList.value.filter(score => score.studentid.toString() === userStore.username);
+      }
     } else {
       console.error('获取学生成绩列表失败', response);
       alert('获取学生成绩列表失败，请稍后重试');
@@ -136,6 +158,11 @@ const fetchScoreList = async () => {
 };
 
 const handleSearch = () => {
+  currentPage.value = 1;
+};
+
+const sortScores = () => {
+  isSorted.value = !isSorted.value;
   currentPage.value = 1;
 };
 
@@ -160,7 +187,7 @@ const nextPage = () => {
 };
 
 watchEffect(() => {
-  const maxPage = Math.ceil(filteredScoreList.value.length / pageSize.value);
+  const maxPage = Math.ceil(sortedScoreList.value.length / pageSize.value);
   if (currentPage.value > maxPage && maxPage > 0) {
     currentPage.value = maxPage;
   }
