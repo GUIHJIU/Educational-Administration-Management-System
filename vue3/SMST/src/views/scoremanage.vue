@@ -29,23 +29,26 @@
           <span>搜索</span>
         </button>
       </div>
-  
       <div class="button-group">
-        <RouterLink v-if="userStore.identity === 'teacher'" class="btn add-btn" to="/add">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn add-btn" to="/score/scoreadd">
           <i class="fas fa-plus"></i>
           <span>添加</span>
         </RouterLink>
-        <RouterLink v-if="userStore.identity === 'teacher'" class="btn edit-btn" to="/update">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn edit-btn" to="/score/scoreupdate">
           <i class="fas fa-edit"></i>
           <span>编辑</span>
         </RouterLink>
-        <RouterLink v-if="userStore.identity === 'teacher'" class="btn delete-btn" to="/delete">
+        <RouterLink v-if="userStore.identity === 'teacher'" class="btn delete-btn" to="/score/scoredelete">
           <i class="fas fa-trash"></i>
           <span>删除</span>
         </RouterLink>
+        <button class="btn analysis-btn" @click="showAnalysis">
+          <i class="fas fa-chart-bar"></i>
+          <span>成绩分析</span>
+        </button>
       </div>
     </div>
-  
+    <RouterView/>
     <div class="table-container">
       <table class="student-table">
         <thead>
@@ -131,6 +134,53 @@ const totalPages = computed(() => {
   return Math.ceil(sortedScoreList.value.length / pageSize.value);
 });
 
+// 学生成绩分析计算属性
+const averageScore = computed(() => {
+  const total = sortedScoreList.value.reduce((acc, score) => acc + score.score, 0);
+  return total / sortedScoreList.value.length || 0;
+});
+
+const highestScore = computed(() => {
+  const maxScore = Math.max(...sortedScoreList.value.map(score => score.score));
+  const maxScoreCourse = sortedScoreList.value.find(score => score.score === maxScore).courseid;
+  return `最高分：${maxScore}，课程ID：${maxScoreCourse}`;
+});
+
+const lowestScore = computed(() => {
+  const minScore = Math.min(...sortedScoreList.value.map(score => score.score));
+  const minScoreCourse = sortedScoreList.value.find(score => score.score === minScore).courseid;
+  return `最低分：${minScore}，课程ID：${minScoreCourse}`;
+});
+
+const totalScore = computed(() => {
+  return sortedScoreList.value.reduce((acc, score) => acc + score.score, 0);
+});
+
+// 教师成绩分析计算属性
+const excellentRate = computed(() => {
+  const total = sortedScoreList.value.length;
+  const excellentCount = sortedScoreList.value.filter(score => score.score >= 90).length;
+  return total > 0 ? (excellentCount / total * 100).toFixed(2) : '0.00';
+});
+
+const failRate = computed(() => {
+  const total = sortedScoreList.value.length;
+  const failCount = sortedScoreList.value.filter(score => score.score < 60).length;
+  return total > 0 ? (failCount / total * 100).toFixed(2) : '0.00';
+});
+
+const improvementRate = computed(() => {
+  const total = sortedScoreList.value.length;
+  const improvementCount = sortedScoreList.value.filter(score => score.score >= 80 && score.score < 90).length;
+  return total > 0 ? (improvementCount / total * 100).toFixed(2) : '0.00';
+});
+
+const borderlineRate = computed(() => {
+  const total = sortedScoreList.value.length;
+  const borderlineCount = sortedScoreList.value.filter(score => score.score >= 60 && score.score <= 65).length;
+  return total > 0 ? (borderlineCount / total * 100).toFixed(2) : '0.00';
+});
+
 // 生命周期钩子
 onMounted(() => {
   fetchScoreList();
@@ -166,12 +216,12 @@ const sortScores = () => {
   currentPage.value = 1;
 };
 
-const editStudent = () => {
-  // 编辑学生成绩的逻辑
-};
-
-const deleteStudent = () => {
-  // 删除学生成绩的逻辑
+const showAnalysis = () => {
+  if (userStore.identity === 'teacher') {
+    alert(`优秀率(90以上)：${excellentRate.value}%\n不及格率(60以下)：${failRate.value}%\n可提升学生率(80~90)：${improvementRate.value}%\n踩线率(60~65)：${borderlineRate.value}%`);
+  } else if (userStore.identity === 'student') {
+    alert(`平均分：${averageScore.value.toFixed(2)}\n${highestScore.value}\n${lowestScore.value}\n总分：${totalScore.value}`);
+  }
 };
 
 const prevPage = () => {
@@ -186,10 +236,19 @@ const nextPage = () => {
   }
 };
 
+// 监听路由变化，重新获取成绩列表
 watchEffect(() => {
   const maxPage = Math.ceil(sortedScoreList.value.length / pageSize.value);
   if (currentPage.value > maxPage && maxPage > 0) {
     currentPage.value = maxPage;
+  }
+});
+
+// 监听路由变化，重新获取成绩列表
+watchEffect(() => {
+  const route = router.currentRoute.value;
+  if (route.path === '/score') {
+    fetchScoreList();
   }
 });
 </script>
@@ -323,6 +382,17 @@ watchEffect(() => {
   background-color: #ff4d4f;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(255, 77, 79, 0.2);
+}
+
+.analysis-btn {
+  background-color: #90ee90;
+  color: white;
+}
+
+.analysis-btn:hover {
+  background-color: #32cd32;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(50, 205, 50, 0.2);
 }
 
 /* 表格样式 */

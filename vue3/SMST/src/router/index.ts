@@ -14,7 +14,10 @@ import StuDeletePage from '../views/Stuadmin/StuAddelete.vue';
 import StuUpdatePage1 from '../views/Stuadmin/StuAdupdate.vue';
 import StuUpdatePage2 from '../views/StuStudent/StuStupdate.vue';
 import Home from "@/views/Home.vue";
+import UpdateScore from '../views/Scoreadmin/ScoreUpdate.vue';
+import DeleteScore from '../views/deletescore.vue';
 import ListPage from '../views/scoremanage.vue';
+import AddScore from '../views/Scoreadmin/Scoreadd.vue';
 import LoginPage from "@/views/LoginView.vue";
 import {useridentitystore} from '@/store/userStore'
 
@@ -152,6 +155,26 @@ const router = createRouter({
             path: '/score',
             name: 'list',
             component: ListPage,
+            children:[
+                {  path:'scoreadd',
+                    component:AddScore,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
+                },
+                {  path:'scoreupdate',
+                    component:UpdateScore,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
+                },
+                {  path:'scoredelete',
+                    component:DeleteScore,
+                    meta:{
+                        requiresRole:['teacher','admin']
+                    }
+                }
+            ]
         },
     ],
 })
