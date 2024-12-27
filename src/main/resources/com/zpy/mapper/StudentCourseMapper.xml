@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zpy.mapper.StudentCourseMapper">
+    <resultMap id="studentCourse" type="com.zpy.pojo.StudentCourse">
+        <id property="id" column="id"/>
+        <result property="sid" column="sid"/>
+        <result column="cid" property="cid"/>
+        <result column="status" property="status"/>
+        <association property="student">
+            <id column="id" property="id"/>
+            <result property="sname" column="sname"/>
+            <result column="password" property="password"/>
+            <result column="sex" property="sex"/>
+            <result column="college" property="college"/>
+            <result property="age" column="age"/>
+            <result property="major" column="major"/>
+            <result property="simage" column="simage"/>
+        </association>
+        <association property="course">
+            <id column="id" property="id"/>
+            <result property="cname" column="cname"/>
+            <result property="major" column="major"/>
+            <result property="address" column="address"/>
+            <result property="num" column="num"/>
+            <result property="stock" column="stock"/>
+            <result column="cimage" property="cimage"/>
+            <result property="cbook" column="cbook"/>
+        </association>
+    </resultMap>
+    <select id="listStudentCourse" resultType="com.zpy.pojo.StudentCourse" resultMap="studentCourse">
+        select sc.id,sc.status,s.sname,s.simage,s.college,c.major,c.stock,c.cname,c.cimage,c.address
+        from student s,course c,student_course sc
+        <where>
+            AND s.id=sc.sid and c.id=sc.cid
+            <if test="id != null and id!='' ">
+                and sc.id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="queryAll" resultType="com.zpy.pojo.CountNumber">
+
+        SELECT c.cname as name ,count(o.id) as count from course c,student_course o where o.cid=c.id
+        GROUP BY c.cname order by count desc
+    </select>
+    <select id="listMyCourse" resultType="com.zpy.pojo.StudentCourse" resultMap="studentCourse">
+        select sc.id,sc.status,sc.cid,s.sname,s.simage,c.major,c.num,c.stock,c.cname,c.cimage,c.address,c.cbook
+        from student s,course c,student_course sc
+        <where>
+            AND s.id=sc.sid and c.id=sc.cid and s.id=#{userId}
+            <if test="cname != null and cname!='' ">
+                and c.cname=#{cname}
+            </if>
+        </where>
+    </select>
+</mapper>

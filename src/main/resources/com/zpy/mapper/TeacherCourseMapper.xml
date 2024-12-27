@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zpy.mapper.TeacherCourseMapper">
+
+    <resultMap id="teacherCourse" type="com.zpy.pojo.TeacherCourse">
+
+        <result property="id" column="id"/>
+        <result property="tid" column="tid"/>
+        <result property="cid" column="cid"/>
+
+        <association property="teacher">
+            <result property="id" column="id"/>
+            <result property="tname" column="tname"/>
+            <result property="password" column="password"/>
+            <result property="sex" column="sex"/>
+            <result property="email" column="email"/>
+            <result property="phone" column="phone"/>
+            <result property="age" column="age"/>
+            <result property="major" column="major"/>
+            <result property="timage" column="timage"/>
+        </association>
+
+        <association property="course">
+            <result property="id" column="id"/>
+            <result property="cname" column="cname"/>
+            <result property="address" column="address"/>
+            <result property="num" column="num"/>
+            <result property="stock" column="stock"/>
+            <result property="cimage" column="cimage"/>
+            <result property="cbook" column="cbook"/>
+            <result property="major" column="major"/>
+
+        </association>
+    </resultMap>
+    <select id="listTeacherCourse" resultType="com.zpy.pojo.TeacherCourse" resultMap="teacherCourse">
+        select tc.id,t.tname,t.timage,t.phone, t.email,c.major,c.stock,c.cname,c.cimage,c.address
+        from teacher t,course c,teacher_course tc
+        <where>
+            AND t.id=tc.tid and c.id=tc.cid
+            <if test="id != null and id!='' ">
+                and tc.id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="listMyCourse" resultType="com.zpy.pojo.TeacherCourse" resultMap="teacherCourse">
+        select tc.id,tc.tid,tc.cid,t.tname,t.timage,t.phone, t.email,c.major,c.num,c.stock,c.cname,c.cimage,c.address
+        from teacher t,course c,teacher_course tc
+        <where>
+            AND t.id=tc.tid and c.id=tc.cid and tc.tid=#{userId}
+
+            <if test="cname != null and cname!='' ">
+                and c.cname=#{cname}
+            </if>
+        </where>
+    </select>
+</mapper>
