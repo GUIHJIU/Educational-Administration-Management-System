@@ -1,6 +1,5 @@
 <template>
   <h1>                                        </h1>
-  <h1>                                        </h1>
   <div class="list-container">
     <div class="page-header">
       <h1 class="page-title">学生个人信息</h1>

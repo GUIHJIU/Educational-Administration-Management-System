@@ -48,7 +48,7 @@ function handleLogout(){
   <div v-else-if="userstore.identity === 'student'" id="app">
     <nav class="navbar">
       <RouterLink to="/home" class="nav-link">首页</RouterLink>
-      <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
+      <RouterLink :to="{ path: '/Persion', query: { studentId: userstore.username }}" class="nav-link">用户信息管理</RouterLink>
       <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/StudentList" class="nav-link">学生学籍管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>

@@ -1,7 +1,6 @@
 <template>
   <div class="list-container">
     <div class="page-header">
-      <h1 class="page-title">学生学籍信息管理</h1>
     </div>
 
     <div class="top-actions">

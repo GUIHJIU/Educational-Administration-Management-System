@@ -19,6 +19,7 @@ import DeleteScore from '../views/deletescore.vue';
 import ListPage from '../views/scoremanage.vue';
 import AddScore from '../views/Scoreadmin/Scoreadd.vue';
 import LoginPage from "@/views/LoginView.vue";
+import Persioninformation from "../views/persionInformation.vue";
 import {useridentitystore} from '@/store/userStore'
 
 const router = createRouter({
@@ -35,6 +36,13 @@ const router = createRouter({
             meta:{
                 requiresRole: ['admin','teacher','student']
             }
+        },
+        {
+            path:"/Persion",
+            component:Persioninformation,
+            meta: {
+                requiresRole: ['student'] // 标记此路由需要普通用户角色才能访问
+            },
         },
         {path: '/StuAdmin',
             component: AdminListPage,
