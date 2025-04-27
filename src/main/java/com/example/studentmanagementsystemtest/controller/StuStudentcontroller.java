@@ -22,7 +22,7 @@ public class StuStudentcontroller {
     private StuStudentservice studentService;
 
     @GetMapping("/student-info/{username}")
-    public ResponseEntity<?> getStudentInfo(@PathVariable String username) {
+    public ResponseEntity< ? > getStudentInfo(@PathVariable String username) {
         try {
             String decodedName = URLDecoder.decode(username, StandardCharsets.UTF_8);
             logger.info("Received request for student name: {}", decodedName);

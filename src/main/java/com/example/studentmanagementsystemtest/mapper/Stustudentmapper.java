@@ -15,6 +15,6 @@ public interface Stustudentmapper {
                 "`出生日期`, `入学日期`, `政治面貌`, `电话号码`, " +
                 "`当前所在级`, `预计毕业日` " +
                 "FROM `stu-information` " +
-                "WHERE `姓名` = #{name}")
+                "WHERE `学号` = #{name}")
         StuStudent findByStudentId(String name);
 }

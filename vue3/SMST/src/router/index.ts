@@ -64,11 +64,11 @@ const router = createRouter({
         },
         {
             path: '/TeacherList',
-            component:TeacherListPage,
+            component: TeacherListPage,
             meta: {
                 requiresRole: ['teacher'] // 标记此路由需要教师用户角色才能访问
             }
-            },
+        },
         {
             path: '/StudentList',
             component: StudentListPage,
@@ -76,20 +76,20 @@ const router = createRouter({
                 requiresRole: ['student'] // 标记此路由需要普通用户角色才能访问
             },
         },
-         {
-                    path:'/StudentList/Stuupdate',
-                    component:StuUpdatePage2
-         },
         {
-            path:'/coursenav',
-            component:Course,
-            meta:{
+            path: '/StudentList/Stuupdate',
+            component: StuUpdatePage2
+        },
+        {
+            path: '/coursenav',
+            component: Course,
+            meta: {
                 requiresRole: ['admin']
             }
         },
         {
-            path:'/course',
-            component:CourseNav,
+            path: '/course',
+            component: CourseNav,
             children:[
                 {
                     path:'addcourse',
@@ -133,7 +133,7 @@ const router = createRouter({
             name: 'exam',
             component: () => import('../views/ExamList.vue'),
             meta: {
-                requiresRole: ['teacher','admin'] 
+                requiresRole: ['teacher', 'admin']
             }
         },
         {

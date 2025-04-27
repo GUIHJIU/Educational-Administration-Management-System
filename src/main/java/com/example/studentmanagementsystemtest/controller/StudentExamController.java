@@ -22,7 +22,6 @@ public class StudentExamController {
     @Autowired
     private StudentExamService studentExamService;
 
-    // 根据学生 ID 获取考试信息
     @GetMapping("/studentid")
     public List<Teacher> getstudentexamList(@RequestParam("studentid") Integer studentid) {
             System.out.println("1");

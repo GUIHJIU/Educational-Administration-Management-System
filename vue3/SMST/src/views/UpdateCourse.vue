@@ -9,12 +9,6 @@
 
         />
       </div>
-      <ul>
-        <li v-for="course in filteredCourses" :key="course.courseId">
-          {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
-          <button @click="courseStore.selectCourse(course.courseId)">修改</button>
-        </li>
-      </ul>
       <div v-if="courseStore.selectedCourse">
         <h2>选中的课程: {{ courseStore.selectedCourse.courseName }}</h2>
         <form @submit.prevent="handleSubmit">
@@ -24,16 +18,24 @@
             <label for="credit">课程学分:</label>
             <input type="text" v-model="courseStore.selectedCourse.credit" id="credit" required />
             <label for="classhour">课程学时:</label>
-            <input type="text" v-model="courseStore.selectedCourse.classHour" id="classhour" required />
+            <input type="text" v-model="courseStore.selectedCourse.classHour" id="classhour" required/>
             <label for="courseType">课程类型:</label>
-            <input type="text" v-model="courseStore.selectedCourse.courseType" id="courseType" required />
+            <input type="text" v-model="courseStore.selectedCourse.courseType" id="courseType" required/>
             <label for="Teacher">课程教师:</label>
-            <input type="text" v-model="courseStore.selectedCourse.Teacher" id="Teacher" required />
+            <input type="text" v-model="courseStore.selectedCourse.Teacher" id="Teacher" required/>
           </div>
           <!-- 其他课程信息的表单字段 -->
           <button type="submit">保存修改</button>
         </form>
       </div>
+      <ul>
+        <li v-for="course in filteredCourses" :key="course.courseId">
+          {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} -
+          {{ course.courseType }} - {{ course.Teacher }}
+          <button @click="courseStore.selectCourse(course.courseId)">修改</button>
+        </li>
+      </ul>
+
     </div>
   </template>
 
@@ -49,12 +51,12 @@
 
   });
   const filteredCourses = computed(() => {
-    const query = searchQuery.value.toLowerCase();
+    const query = searchQuery.value;
     return courseStore.courses.filter(course => {
       return (
-          course.Teacher.toLowerCase().includes(query) ||
-          course.courseName.toLowerCase().includes(query) || // 注意这里也应该添加 toLowerCase() 以保持一致性
-          course.courseType.toLowerCase().includes(query)
+          course.Teacher.includes(query) ||
+          course.courseName.includes(query) ||
+          course.courseType.includes(query)
       );
     });
   });

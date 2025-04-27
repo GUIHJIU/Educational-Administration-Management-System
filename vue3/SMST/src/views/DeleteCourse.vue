@@ -1,6 +1,6 @@
 <template>
         <div>
-      <h1 style="text-align: center">删除课程信息</h1>
+          <h1 style="text-align: center">删除课程信息</h1>
           <div style="text-align: center; margin-bottom: 20px;">
             <input
                 type="text"
@@ -9,17 +9,19 @@
 
             />
           </div>
-      <ul>
-        <li v-for="course in filteredCourses" :key="course.courseId">
-          {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
-          <button @click="courseStore.selectCourse(course.courseId)">删除</button>
-        </li>
-      </ul>
-      <div v-if="courseStore.selectedCourse">
-        <h2>选中的课程: {{ courseStore.selectedCourse.courseName }}</h2>
-        <button @click="deletecourse">确认删除</button>
-      </div>
-    </div>
+          <div v-if="courseStore.selectedCourse">
+            <h2>选中的课程: {{ courseStore.selectedCourse.courseName }}</h2>
+            <button @click="deletecourse">确认删除</button>
+          </div>
+          <ul>
+            <li v-for="course in filteredCourses" :key="course.courseId">
+              {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} -
+              {{ course.courseType }} - {{ course.Teacher }}
+              <button @click="courseStore.selectCourse(course.courseId)">删除</button>
+            </li>
+          </ul>
+
+        </div>
 </template>
 <script lang="ts" setup>
 import {onMounted, ref ,computed} from 'vue';
@@ -36,7 +38,7 @@ const filteredCourses = computed(() => {
   return courseStore.courses.filter(course => {
     return (
         course.Teacher.toLowerCase().includes(query) ||
-        course.courseName.toLowerCase().includes(query) || // 注意这里也应该添加 toLowerCase() 以保持一致性
+        course.courseName.toLowerCase().includes(query) ||
         course.courseType.toLowerCase().includes(query)
     );
   });
