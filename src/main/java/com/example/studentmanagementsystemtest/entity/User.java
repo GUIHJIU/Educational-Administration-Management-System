@@ -1,6 +1,7 @@
 package com.example.studentmanagementsystemtest.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import lombok.*;
 
 @Data

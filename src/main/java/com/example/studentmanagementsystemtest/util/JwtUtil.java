@@ -12,6 +12,13 @@ import java.util.Date;
 
 public class JwtUtil {
     private static final String SECRET_KEY = System.getenv("JWT_SECRET"); // 从外部获取密钥
+
+    static {
+        if (System.getenv("JWT_SECRET") == null) {
+            throw new IllegalStateException("未配置环境变量 JWT_SECRET！");
+        }
+    }
+
     static SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     private static final long EXPIRATION = 864_000_000; // 10天
 
