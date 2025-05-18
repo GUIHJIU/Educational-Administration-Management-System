@@ -5,6 +5,11 @@ spring:
     password: zd004921
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted   # 实体类字段名
+      logic-delete-value: 1         # 删除标记值
+      logic-not-delete-value: 0     # 未删除标记值
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启SQL日志
   type-aliases-package: com.example.entity # 实体类包路径
