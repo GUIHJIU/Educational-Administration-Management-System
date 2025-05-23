@@ -1,18 +1,17 @@
 package com.example.studentmanagementsystemtest.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
-// SelectionRecord.java
-@TableName("selection_record")
+@Data
+@TableName("select_record")
 public class SelectionRecord {
     @TableId(type = IdType.AUTO)
     private Long id;
+    @TableField(value = "studentId")
     private Long studentId;
+    @TableField(value = "courseId")
     private Long courseId;
     @TableLogic
     private Integer deleted;
-    // 其他字段及getter/setter
 }

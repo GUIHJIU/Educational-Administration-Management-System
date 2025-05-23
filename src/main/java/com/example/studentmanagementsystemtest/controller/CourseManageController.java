@@ -70,6 +70,6 @@ public class CourseManageController {
     @Operation(summary = "学生选课")
     public Result< Boolean > selectCourse(@PathVariable Long courseId,
                                           @RequestParam Long studentId) {
-        return courseService.deductStock(courseId);
+        return courseService.deductStock(courseId, studentId);
     }
 }

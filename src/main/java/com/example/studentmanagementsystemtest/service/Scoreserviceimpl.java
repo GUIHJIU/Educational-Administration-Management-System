@@ -15,8 +15,8 @@ public interface Scoreserviceimpl {
   int updateStudent(Score student);
 
   // 删除学生成绩
-  void deleteStudentScore(int studentid, int courseid);
+  void deleteStudentScore(int studentId, int courseId);
 
-  //根据学生ID和课程ID查询学生成绩
-  int getStudentScoreByStudentIdAndCourseId(int studentid, int courseid);
+    //根据学生ID和课程ID查询学生成绩
+    int getStudentScoreByStudentIdAndCourseId(int studentId, int courseId);
 }

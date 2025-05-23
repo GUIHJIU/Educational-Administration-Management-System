@@ -8,12 +8,14 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-// SelectionRecordMapper.java
+
 @Mapper
 public interface SelectionRecordMapper
         extends BaseMapper< SelectionRecord > {
 
-    @Select("SELECT course_id FROM selection_record " +
-            "WHERE student_id = #{studentId} AND deleted = 0")
+    @Select("SELECT courseId FROM select_record " +
+            "WHERE studentId = #{studentId} AND deleted = 0")
     List< Long > getCourseIdsByStudentId(@Param("studentId") Long studentId);
+
+
 }

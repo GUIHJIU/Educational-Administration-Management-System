@@ -23,6 +23,8 @@ public class SelectionRecordServiceImpl
 
     @Autowired
     private CourseManageMapper courseMapper;
+    @Autowired
+    private SelectionRecordMapper selectionRecordMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -38,5 +40,11 @@ public class SelectionRecordServiceImpl
             return Collections.emptyList();
         }
         return courseMapper.selectBatchIds(courseIds);
+    }
+
+    @Override
+    public boolean addSelectedCourseRecord(SelectionRecord SR) {
+        int result = selectionRecordMapper.insert(SR);
+        return result != 0;
     }
 }

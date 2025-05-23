@@ -42,13 +42,13 @@ public interface CourseManageMapper extends BaseMapper< Course > {
     }
 
     @Update("UPDATE course SET remaining = remaining - 1, version = version + 1 " +
-            "WHERE course_id = #{courseId} AND remaining > 0 AND version = #{version}")
+            "WHERE courseId = #{courseId} AND remaining > 0 AND version = #{version}")
     int deductStockWithVersion(@Param("courseId") Long courseId,
                                @Param("version") Integer version);
 
     // CourseManageMapper.java 添加方法
     @Select("SELECT EXISTS(SELECT 1 FROM selection_record sr " +
-            "JOIN course c ON sr.course_id = c.course_id " +
+            "JOIN course c ON sr.courseId = c.courseId " +
             "WHERE sr.student_id = #{studentId} " +
             "AND (c.start_time < #{newEnd} AND c.end_time > #{newStart}))")
     boolean checkTimeConflictInDB(@Param("studentId") Long studentId,

@@ -13,7 +13,10 @@ public enum ErrorCode {
     COURSE_NOT_EXIST(1001, "课程不存在"),
     STOCK_NOT_ENOUGH(1002, "库存不足"),
     TIME_CONFLICT(1003, "时间冲突"),
-    UPDATE_COURSE_ERROR(1004, "课程更新失败");
+    UPDATE_COURSE_ERROR(1004, "课程更新失败"),
+    OPERATION_FAILED(1005, "选课失败"),
+    DUPLICATE_SELECTION(1006, "重复选课");
+
 
     private final Integer code;
     private final String message;

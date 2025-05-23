@@ -3,6 +3,7 @@ package com.example.studentmanagementsystemtest.service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.studentmanagementsystemtest.Exception.BusinessException;
 import com.example.studentmanagementsystemtest.entity.Course;
+import com.example.studentmanagementsystemtest.entity.SelectionRecord;
 import com.example.studentmanagementsystemtest.mapper.CourseManageMapper;
 import com.example.studentmanagementsystemtest.service.CourseManageService;
 import com.example.studentmanagementsystemtest.util.ErrorCode;
@@ -14,8 +15,10 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.naming.spi.DirStateFactory;
 import java.time.LocalDateTime;
@@ -36,6 +39,10 @@ public class CourseManageServiceImpl
 
     @Autowired
     private SelectionRecordService selectionService;
+
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     @Override
     public List< Course > ShowAllCourse() {
@@ -89,29 +96,47 @@ public class CourseManageServiceImpl
      * 带分布式锁的库存扣减
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Result< Boolean > deductStock(Long courseId) {
+    //@Transactional(rollbackFor = Exception.class)添加了TransactionTemplate来管理事务，不需要该行
+    public Result< Boolean > deductStock(Long courseId, Long studentId) {
         RLock lock = redissonClient.getLock("course:lock:" + courseId);
+        boolean lockAcquired = false;
         try {
-            if (lock.tryLock(3, 15, TimeUnit.SECONDS)) {
-                Course course = getByIdWithCheck(courseId);
-
-                // 使用CAS机制更新
-                int result = baseMapper.deductStockWithVersion(
-                        courseId, course.getVersion());
-
-                if (result > 0) {
-                    log.info("库存扣减成功，课程ID：{}", courseId);
-                    return Result.success(true);
-                }
-                return Result.error(ErrorCode.STOCK_NOT_ENOUGH);
+            lockAcquired = lock.tryLock(3, 15, TimeUnit.SECONDS);
+            if (lockAcquired) {
+                return transactionTemplate.execute(status -> {
+                    try {
+                        Course course = getByIdWithCheck(courseId);
+                        int result = baseMapper.deductStockWithVersion(courseId, course.getVersion());
+                        if (result > 0) {
+                            SelectionRecord record = new SelectionRecord();
+                            record.setCourseId(courseId);
+                            record.setStudentId(studentId);
+                            try {
+                                selectionService.addSelectedCourseRecord(record);
+                            } catch (DuplicateKeyException e) {
+                                status.setRollbackOnly();
+                                return Result.error(ErrorCode.DUPLICATE_SELECTION);
+                            }
+                            log.info("选课成功，课程ID：{}，学生ID：{}", courseId, studentId);
+                            return Result.success(true);
+                        } else {
+                            return Result.error(ErrorCode.STOCK_NOT_ENOUGH);
+                        }
+                    } catch (Exception e) {
+                        status.setRollbackOnly();
+                        throw new BusinessException(ErrorCode.OPERATION_FAILED, e.getMessage());
+                    }
+                });
+            } else {
+                return Result.error(ErrorCode.SERVICE_BUSY);
             }
-            return Result.error(ErrorCode.SERVICE_BUSY);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new BusinessException(ErrorCode.SERVICE_BUSY);
         } finally {
-            lock.unlock();
+            if (lockAcquired && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 

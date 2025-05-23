@@ -15,7 +15,7 @@ public interface CourseManageService extends IService< Course > {  // 继承MyBa
     // 自定义业务方法
     List< Course > dynamicSearch(String queryType, String queryParam);
 
-    Result< Boolean > deductStock(Long courseId);
+    Result< Boolean > deductStock(Long courseId, Long studentId);
 
     List< Course > getAvailableCourses(Long studentId);
 
