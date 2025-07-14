@@ -1,6 +1,7 @@
 package com.example.studentmanagementsystemtest.util;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Result< T > implements Serializable {
     private Integer code;    // 状态码
@@ -37,6 +38,10 @@ public class Result< T > implements Serializable {
         return error(errorCode.getCode(), errorCode.getMessage());
     }
 
+    public static < T > Result< T > error(ErrorCode errorCode, String fieldErrors) {
+        return error(errorCode.getCode(), errorCode.getMessage() + ": " + fieldErrors);
+    }
+
     // 链式调用支持
     public Result< T > code(Integer code) {
         this.code = code;
@@ -53,7 +58,7 @@ public class Result< T > implements Serializable {
         return this;
     }
 
-    // Getter 方法（Setter 建议不开放）
+    // Getter 方法
     public Integer getCode() {
         return code;
     }

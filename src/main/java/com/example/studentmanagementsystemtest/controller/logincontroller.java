@@ -25,9 +25,14 @@ public class logincontroller {
         if (!verifyPassword(user1.getPassword(), user.getSalt(), user.getPassword())) {
             ResponseEntity.status(401).body("Invalid credentials");
         }
-        String token = JwtUtil.generateToken(user1.getUsername());
-        System.out.println("验证成功" + token);
-        return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();
+        String accessToken = JwtUtil.generateAccessToken(user1.getUsername());
+        String refreshToken = JwtUtil.generateRefreshToken(user1.getUsername());
+
+        //System.out.println("验证成功" + token);
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + accessToken)
+                .header("Refresh-Token", refreshToken)
+                .build();
     }
 
     public boolean verifyPassword(String rawPassword, String storedSalt, String storedHash) {
