@@ -101,7 +101,7 @@ const pageSize = ref(10);
 const router = useRouter();
 const userStore = useridentitystore();
 
-const API_BASE_URL = 'http://localhost:8080/score';
+const API_BASE_URL = 'https://localhost:443/score';
 
 // 控制是否排序的变量
 const isSorted = ref(false);

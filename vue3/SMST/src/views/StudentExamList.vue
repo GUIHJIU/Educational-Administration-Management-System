@@ -46,7 +46,7 @@ interface Exam {
 }
 
 const examList = ref<Exam[]>([]);
-const API_BASE_URL = 'http://localhost:8080/studentexams';
+const API_BASE_URL = 'https://localhost:443/studentexams';
 const studentId = ref('');
 
 onMounted(() => {

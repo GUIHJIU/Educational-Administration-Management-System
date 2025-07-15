@@ -70,6 +70,13 @@ const router = createRouter({
             }
         },
         {
+            path: '/select-course',
+            name: 'SelectCourse',
+            component: () => import('../views/StudentSelectCourse/StudentSelectCourse.vue'),
+            meta: {requiresAuth: true}
+        },
+
+        {
             path: '/StudentList',
             component: StudentListPage,
             meta: {

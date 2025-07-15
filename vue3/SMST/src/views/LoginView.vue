@@ -20,47 +20,80 @@
 </template>
 
 <script lang="ts" setup>
-
 import axios from 'axios';
-import { ref,  reactive } from 'vue';
+import {ref} from 'vue';
 import { useRouter } from 'vue-router';
-import {useridentitystore} from '@/store/userStore'
-const userstore=useridentitystore()
-const username=ref('');
-const password=ref('');
+import {useridentitystore} from '@/store/userStore';
+
+// 定义接口在顶层，避免重复定义
+interface ApiResponse<T> {
+  code: number;
+  message: string;
+  data: T;
+  timestamp: number;
+}
+
+interface UserInfo {
+  username: string;
+  position: string;
+}
+
+const userstore = useridentitystore();
+const username = ref('');
+const password = ref('');
 const router = useRouter();
-const user=reactive({
-  username:'',
-  position:''
-})
+
 const handleLogin = async () => {
   try {
     // 发送 POST 请求到 Spring 后端
-    const response = await axios.post<{ username: string, position: string }>('http://localhost:8080/login/login', {
-      username: username.value,
-      password: password.value,
-    });
+    const response = await axios.post<ApiResponse<UserInfo>>(
+        'https://localhost:443/login/login',
+        {
+          username: username.value,
+          password: password.value,
+        }
+    );
 
+    // 检查响应状态码
     if (response.status === 200) {
-      userstore.identity = response.data.position;
-      // 保存用户名（学号）到 store 和 localStorage
-      userstore.username= username.value; // 使用输入的用户名作为学号
+      // 正确访问嵌套的data属性
+      const userData = response.data.data;
+
+      // 保存用户信息到store
+      userstore.identity = userData.position;
+      userstore.username = username.value;
+
+      // 保存到localStorage
       localStorage.setItem('userAccount', username.value);
 
       console.log('登录成功:', response);
+      console.log('身份信息:', userData.position);
       console.log('保存的账号:', username.value);
 
       alert("登录成功");
-      router.push('/home');
+      await router.push('/home');
     }
   } catch (error) {
     console.error('登录失败:', error);
-    alert('登录失败，请检查用户名和密码');
+
+    // 更详细的错误处理
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // 服务器返回了错误响应
+        console.error('错误状态码:', error.response.status);
+        console.error('错误数据:', error.response.data);
+        alert(`登录失败: ${error.response.data?.message || '请检查用户名和密码'}`);
+      } else {
+        // 请求已发送但无响应
+        alert('网络错误，请稍后重试');
+      }
+    } else {
+      // 其他错误
+      alert('登录失败，请稍后重试');
+    }
   }
 };
-
 </script>
-
 <style scoped>
 /* 重置基础样式 */
 * {

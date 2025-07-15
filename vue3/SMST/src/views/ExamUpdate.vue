@@ -44,7 +44,7 @@ import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
-const API_BASE_URL = 'http://localhost:8080/exams';
+const API_BASE_URL = 'https://localhost:443/exams';
 
 const formData = ref({
   class_id: '',

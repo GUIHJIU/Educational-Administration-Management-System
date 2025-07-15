@@ -51,7 +51,7 @@ import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'https://localhost:443/student';
 
 interface FormData {
   stuNum: number;

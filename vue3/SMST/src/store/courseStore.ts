@@ -23,7 +23,7 @@ export const useCourseStore = defineStore('course', {
     async updateCourse() {
       if (this.selectedCourse) {
         try {
-          const response = await axios.put('http://localhost:8080/course/updatecourse', this.selectedCourse);
+          const response = await axios.put('https://localhost:443/course/updatecourse', this.selectedCourse);
           await this.fetchCourse();
         } catch (error) {
           console.error('Failed to update course:', error);
@@ -34,7 +34,7 @@ export const useCourseStore = defineStore('course', {
 
       if (this.selectedCourse) {
         try {
-          const response = await axios.delete(`http://localhost:8080/course/deletecourse?courseId=${courseId}`)
+          const response = await axios.delete(`https://localhost:443/course/deletecourse?courseId=${courseId}`)
           await this.fetchCourse();
         }
         catch (error) {
@@ -45,7 +45,7 @@ export const useCourseStore = defineStore('course', {
     },
     async searchCourse(queryType:string,queryParam:string){
       try{
-        const response=await axios.get(`http://localhost:8080/course/searchcourse?queryType=${queryType}&queryParam=${queryParam}`)
+        const response = await axios.get(`https://localhost:443/course/searchcourse?queryType=${queryType}&queryParam=${queryParam}`)
         this.courses=response.data;
       }
       catch(error){

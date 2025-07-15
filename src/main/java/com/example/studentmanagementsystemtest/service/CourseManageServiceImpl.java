@@ -5,9 +5,8 @@ import com.example.studentmanagementsystemtest.Exception.BusinessException;
 import com.example.studentmanagementsystemtest.entity.Course;
 import com.example.studentmanagementsystemtest.entity.SelectionRecord;
 import com.example.studentmanagementsystemtest.mapper.CourseManageMapper;
-import com.example.studentmanagementsystemtest.service.CourseManageService;
 import com.example.studentmanagementsystemtest.util.ErrorCode;
-import com.example.studentmanagementsystemtest.util.Result;
+import com.example.studentmanagementsystemtest.util.ResponseResult;
 import com.example.studentmanagementsystemtest.util.TimeConflictDetector;
 import com.example.studentmanagementsystemtest.util.TimeRange;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.naming.spi.DirStateFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -97,7 +95,7 @@ public class CourseManageServiceImpl
      */
     @Override
     //@Transactional(rollbackFor = Exception.class)添加了TransactionTemplate来管理事务，不需要该行
-    public Result< Boolean > deductStock(Long courseId, Long studentId) {
+    public ResponseResult< Boolean > deductStock(Long courseId, Long studentId) {
         RLock lock = redissonClient.getLock("course:lock:" + courseId);
         boolean lockAcquired = false;
         try {
@@ -115,12 +113,12 @@ public class CourseManageServiceImpl
                                 selectionService.addSelectedCourseRecord(record);
                             } catch (DuplicateKeyException e) {
                                 status.setRollbackOnly();
-                                return Result.error(ErrorCode.DUPLICATE_SELECTION);
+                                return ResponseResult.error(ErrorCode.DUPLICATE_SELECTION);
                             }
                             log.info("选课成功，课程ID：{}，学生ID：{}", courseId, studentId);
-                            return Result.success(true);
+                            return ResponseResult.success(true);
                         } else {
-                            return Result.error(ErrorCode.STOCK_NOT_ENOUGH);
+                            return ResponseResult.error(ErrorCode.STOCK_NOT_ENOUGH);
                         }
                     } catch (Exception e) {
                         status.setRollbackOnly();
@@ -128,7 +126,7 @@ public class CourseManageServiceImpl
                     }
                 });
             } else {
-                return Result.error(ErrorCode.SERVICE_BUSY);
+                return ResponseResult.error(ErrorCode.SERVICE_BUSY);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

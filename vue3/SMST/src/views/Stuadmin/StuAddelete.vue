@@ -20,7 +20,7 @@ const deleteStudentInfo = async () => {
     return;
   }
 
-  const API_BASE_URL = 'http://localhost:8080/student';
+  const API_BASE_URL = 'https://localhost:443/student';
   try {
     const response = await axios.delete(`${API_BASE_URL}/delete/${stuNum}`);
 

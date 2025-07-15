@@ -99,8 +99,8 @@
   const selectedExam = ref<Exam | null>(null);
   const router = useRouter();
   const studentId = ref('');
-  
-  const API_BASE_URL = 'http://localhost:8080/exams';
+
+  const API_BASE_URL = 'https://localhost:443/exams';
   
   // 计算属性
   const filteredExamList = computed(() => {

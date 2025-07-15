@@ -106,7 +106,7 @@ const pageSize = ref(10);
 const selectedStudent = ref(null);
 const router = useRouter();
 
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'https://localhost:443/student';
 
 // 计算属性
 const filteredStudentList = computed(() => {

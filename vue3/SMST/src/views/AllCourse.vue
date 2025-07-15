@@ -34,7 +34,7 @@ const CourseList = reactive([]); // 初始化为空数组
 
 onMounted(async () => {
     try {
-        const response = await axios.get('http://localhost:8080/course/course');
+      const response = await axios.get('https://localhost:443/course/course');
         // 正确使用map来转换数组
         CourseList.push(...response.data.map(course => ({
             courseId: course.courseId,

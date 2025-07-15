@@ -40,7 +40,7 @@
     const addCourse=async()=> {
       if (course.value.courseName && course.value.classHour && course.value.credit) {
         try {
-          const response = await axios.post('http://localhost:8080/course/addcourses',course.value);
+          const response = await axios.post('https://localhost:443/course/addcourses', course.value);
           course.value.courseName=''
           course.value.classHour=''
           course.value.credit=''

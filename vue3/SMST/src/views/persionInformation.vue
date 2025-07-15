@@ -108,7 +108,7 @@ onMounted(async () => {
     }
     
     // 修改为正确的后端API地址
-    const response = await axios.get(`http://localhost:8080/api/student-info/${studentId}`)
+    const response = await axios.get(`https://localhost:443/api/student-info/${studentId}`)
     
     if (response.data) {
       studentInfo.value = response.data

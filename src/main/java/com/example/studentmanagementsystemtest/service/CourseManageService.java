@@ -2,9 +2,7 @@ package com.example.studentmanagementsystemtest.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.studentmanagementsystemtest.entity.Course;
-import com.example.studentmanagementsystemtest.mapper.CourseManageMapper;
-import com.example.studentmanagementsystemtest.util.Result;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.studentmanagementsystemtest.util.ResponseResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +13,7 @@ public interface CourseManageService extends IService< Course > {  // 继承MyBa
     // 自定义业务方法
     List< Course > dynamicSearch(String queryType, String queryParam);
 
-    Result< Boolean > deductStock(Long courseId, Long studentId);
+    ResponseResult< Boolean > deductStock(Long courseId, Long studentId);
 
     List< Course > getAvailableCourses(Long studentId);
 

@@ -44,7 +44,7 @@ onMounted(async () => {
   examId.value = route.params.id as string
 
   try {
-    const response = await axios.get(`http://localhost:8080/exams/${examId.value}`)
+    const response = await axios.get(`https://localhost:443/exams/${examId.value}`)
     if (response.status === 200) {
       form.value = response.data
     } else {

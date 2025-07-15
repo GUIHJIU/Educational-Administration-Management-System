@@ -73,7 +73,7 @@ const studentInfo = ref(null);
 const router = useRouter();
 const userStore = useridentitystore();
 
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'https://localhost:443/student';
 
 // 生命周期钩子
 onMounted(() => {

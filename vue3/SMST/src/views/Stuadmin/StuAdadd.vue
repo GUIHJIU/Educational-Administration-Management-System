@@ -72,7 +72,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const API_BASE_URL = 'http://localhost:8080/student';
+const API_BASE_URL = 'https://localhost:443/student';
 
 // 明确声明formData各字段的初始值类型，确保数据一致性
 const formData = ref({

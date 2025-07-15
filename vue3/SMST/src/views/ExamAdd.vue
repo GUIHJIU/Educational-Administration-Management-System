@@ -43,7 +43,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const API_BASE_URL = 'http://localhost:8080/exams/add';
+const API_BASE_URL = 'https://localhost:443/exams/add';
 
 const formData = ref({
   class_id: '',
