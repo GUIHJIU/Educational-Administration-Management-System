@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue';
-import axios from 'axios';
+import {onMounted, ref} from 'vue';
+import apiClient from '@/utils/axios.js';
 
 export default {
   setup() {
@@ -31,7 +31,7 @@ export default {
     // 获取课程列表
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('https://localhost:443/courses');
+        const response = await apiClient().get('https://localhost:443/courses');
         courseList.value = response.data.data;
       } catch (error) {
         console.error('获取课程列表失败:', error);

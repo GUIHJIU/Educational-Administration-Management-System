@@ -66,9 +66,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import {onMounted, ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import apiClient from '@/utils/axios.js';
 
 const router = useRouter();
 const route = useRoute();
@@ -118,10 +118,10 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.put(`${API_BASE_URL}/update`, studentInfoToUpdate);
+    const response = await apiClient().put(`${API_BASE_URL}/update`, studentInfoToUpdate);
     if (response.status === 200) {
       alert('修改成功');
-      router.push('/StuAdmin');
+      await router.push('/StuAdmin');
     } else {
       throw new Error('修改失败');
     }

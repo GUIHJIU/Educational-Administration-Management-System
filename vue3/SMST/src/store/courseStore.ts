@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import axios from 'axios';
 
 export const useCourseStore = defineStore('course', {
@@ -14,7 +14,14 @@ export const useCourseStore = defineStore('course', {
     },
     async fetchCourse() {
       try {
-        const response = await axios.get<{ courseId: number; courseName: string; credit: number; classHour: number;courseType:string;Teacher:string; }[]>('http://localhost:8080/course/course');
+        const response = await axios.get<{
+          courseId: number;
+          courseName: string;
+          credit: number;
+          classHour: number;
+          courseType: string;
+          Teacher: string;
+        }[]>('https://localhost:443/course/course');
         this.courses = response.data;
       } catch (error) {
         console.error('Failed to fetch courses:', error);

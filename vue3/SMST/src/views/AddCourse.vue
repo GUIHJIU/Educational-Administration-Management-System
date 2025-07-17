@@ -28,8 +28,9 @@
   </template>
    
   <script lang="ts" setup>
-  import axios from 'axios';
+  import apiClient from '@/utils/axios';
   import {ref} from 'vue'
+
   let course=ref({
      courseName:'',
     classHour:'',
@@ -40,7 +41,7 @@
     const addCourse=async()=> {
       if (course.value.courseName && course.value.classHour && course.value.credit) {
         try {
-          const response = await axios.post('https://localhost:443/course/addcourses', course.value);
+          const response = await apiClient.post('https://localhost:443/course/addcourses', course.value);
           course.value.courseName=''
           course.value.classHour=''
           course.value.credit=''

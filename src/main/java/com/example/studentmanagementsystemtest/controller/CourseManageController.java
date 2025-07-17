@@ -3,6 +3,7 @@ package com.example.studentmanagementsystemtest.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.studentmanagementsystemtest.entity.Course;
 import com.example.studentmanagementsystemtest.service.CourseManageServiceImpl;
+import com.example.studentmanagementsystemtest.util.ErrorCode;
 import com.example.studentmanagementsystemtest.util.PageResult;
 import com.example.studentmanagementsystemtest.util.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,12 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.studentmanagementsystemtest.util.ErrorCode;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/course")
 @Tag(name = "课程管理接口")
 public class CourseManageController {
     @Autowired

@@ -2,13 +2,16 @@ package com.example.studentmanagementsystemtest.controller;
 
 import com.example.studentmanagementsystemtest.entity.User;
 import com.example.studentmanagementsystemtest.service.loginservice;
+import com.example.studentmanagementsystemtest.util.ErrorCode;
 import com.example.studentmanagementsystemtest.util.JwtUtil;
 import com.example.studentmanagementsystemtest.util.ResponseResult;
-import com.example.studentmanagementsystemtest.util.ErrorCode;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -56,6 +59,7 @@ public class logincontroller {
 
             // 返回结果
             return ResponseEntity.ok()
+                    .header("Access-Control-Expose-Headers\", \"Authorization, Refresh-Token")
                     .header("Authorization", "Bearer " + accessToken)
                     .header("Refresh-Token", refreshToken)
                     .body(responseResult);

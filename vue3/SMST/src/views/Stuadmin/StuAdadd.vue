@@ -67,9 +67,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
+import apiClient from '@/utils/axios.js';
 
 const router = useRouter();
 const API_BASE_URL = 'https://localhost:443/student';
@@ -119,10 +119,10 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/add`, studentInfoToSend);
+    const response = await apiClient().post(`${API_BASE_URL}/add`, studentInfoToSend);
     if (response.status === 200) {
       alert('添加成功');
-      router.push('/StuAdmin');
+      await router.push('/StuAdmin');
     } else {
       throw new Error('添加失败');
     }

@@ -1,17 +1,17 @@
 <template>
   <div class="login-container">
     <div class="background-overlay"></div>
-    
+
     <div class="login-form">
       <h2>学生信息管理系统</h2>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">用户名:</label>
-          <input type="text" v-model="username" id="username" required placeholder="请输入用户名" />
+          <input type="text" v-model="username" id="username" required placeholder="请输入用户名"/>
         </div>
         <div class="form-group">
           <label for="password">密码:</label>
-          <input type="password" v-model="password" id="password" required placeholder="请输入密码" />
+          <input type="password" v-model="password" id="password" required placeholder="请输入密码"/>
         </div>
         <button type="submit">登录</button>
       </form>
@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios';
+import apiClient from "@/utils/axios";
 import {ref} from 'vue';
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 import {useridentitystore} from '@/store/userStore';
 
 // 定义接口在顶层，避免重复定义
@@ -46,7 +46,7 @@ const router = useRouter();
 const handleLogin = async () => {
   try {
     // 发送 POST 请求到 Spring 后端
-    const response = await axios.post<ApiResponse<UserInfo>>(
+    const response = await apiClient.post<ApiResponse<UserInfo>>(
         'https://localhost:443/login/login',
         {
           username: username.value,
@@ -56,22 +56,43 @@ const handleLogin = async () => {
 
     // 检查响应状态码
     if (response.status === 200) {
+      console.log('完整响应头:', response.headers);
       // 正确访问嵌套的data属性
       const userData = response.data.data;
 
       // 保存用户信息到store
       userstore.identity = userData.position;
       userstore.username = username.value;
+      // 1. 从响应头中提取 tokens
+      const authHeader = response.headers['authorization'];
+      const refreshToken = response.headers['refresh-token'];
+      console.log('Tokens:', authHeader, refreshToken);
 
-      // 保存到localStorage
-      localStorage.setItem('userAccount', username.value);
+      // 2. 验证并提取 access token
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const accessToken = authHeader.substring(7); // 去掉 "Bearer " 前缀
 
-      console.log('登录成功:', response);
-      console.log('身份信息:', userData.position);
-      console.log('保存的账号:', username.value);
+        // 3. 存储 tokens
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        userstore.accessToken = accessToken;
+        userstore.refreshToken = refreshToken;
 
-      alert("登录成功");
-      await router.push('/home');
+        // 4. 设置 axios 默认请求头
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+        // 保存到localStorage
+        localStorage.setItem('userAccount', username.value);
+        localStorage.setItem('userIdentity', userData.position);
+
+
+        console.log('登录成功:', response);
+        console.log('身份信息:', userData.position);
+        console.log('保存的账号:', username.value);
+
+        alert("登录成功");
+        await router.push('/home');
+      }
     }
   } catch (error) {
     console.error('登录失败:', error);
@@ -154,10 +175,9 @@ html, body {
   padding: 40px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(0, 0, 0, 0.1),
-    inset 0 0 15px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+  0 0 20px rgba(0, 0, 0, 0.1),
+  inset 0 0 15px rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
@@ -193,17 +213,15 @@ input {
   font-size: 15px;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.05),
-    0 2px 4px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05),
+  0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 input:focus {
   outline: none;
   border-color: #4CAF50;
-  box-shadow: 
-    0 0 0 3px rgba(76, 175, 80, 0.2),
-    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2),
+  inset 0 2px 4px rgba(0, 0, 0, 0.05);
   transform: translateY(-1px);
 }
 
@@ -219,25 +237,22 @@ button {
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 15px rgba(76, 175, 80, 0.3),
-    0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3),
+  0 2px 5px rgba(0, 0, 0, 0.1);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
   background: linear-gradient(145deg, #45a049, #3d8b40);
   transform: translateY(-2px);
-  box-shadow: 
-    0 6px 20px rgba(76, 175, 80, 0.4),
-    0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4),
+  0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 button:active {
   transform: translateY(0);
-  box-shadow: 
-    0 2px 10px rgba(76, 175, 80, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3),
+  0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* 响应式设计 */
