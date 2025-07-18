@@ -91,9 +91,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import axios from 'axios'
+import {onMounted, ref} from 'vue'
+import {useRoute} from 'vue-router'
+import apiClient from '@/utils/axios'
 
 const route = useRoute()
 const studentInfo = ref(null)
@@ -108,7 +108,7 @@ onMounted(async () => {
     }
     
     // 修改为正确的后端API地址
-    const response = await axios.get(`https://localhost:443/api/student-info/${studentId}`)
+    const response = await apiClient.get(`https://localhost:443/api/student-info/${studentId}`)
     
     if (response.data) {
       studentInfo.value = response.data

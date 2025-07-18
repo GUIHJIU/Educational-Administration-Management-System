@@ -119,7 +119,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await apiClient().post(`${API_BASE_URL}/add`, studentInfoToSend);
+    const response = await apiClient.post(`${API_BASE_URL}/add`, studentInfoToSend);
     if (response.status === 200) {
       alert('添加成功');
       await router.push('/StuAdmin');

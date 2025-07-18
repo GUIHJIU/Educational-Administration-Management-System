@@ -6,7 +6,8 @@ export const useridentitystore=defineStore('userStore',{
             identity:'null',
             username: 'null',
             accessToken: 'null',
-            refreshToken: 'null'
+            refreshToken: 'null',
+            id: 0,
         }
     }
 })

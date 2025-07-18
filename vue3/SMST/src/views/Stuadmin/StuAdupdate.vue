@@ -118,7 +118,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await apiClient().put(`${API_BASE_URL}/update`, studentInfoToUpdate);
+    const response = await apiClient.put(`${API_BASE_URL}/update`, studentInfoToUpdate);
     if (response.status === 200) {
       alert('修改成功');
       await router.push('/StuAdmin');

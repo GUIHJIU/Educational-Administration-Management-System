@@ -24,6 +24,7 @@ import apiClient from "@/utils/axios";
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {useridentitystore} from '@/store/userStore';
+import axios from "axios";
 
 // 定义接口在顶层，避免重复定义
 interface ApiResponse<T> {
@@ -36,6 +37,7 @@ interface ApiResponse<T> {
 interface UserInfo {
   username: string;
   position: string;
+  id: number;
 }
 
 const userstore = useridentitystore();
@@ -63,6 +65,7 @@ const handleLogin = async () => {
       // 保存用户信息到store
       userstore.identity = userData.position;
       userstore.username = username.value;
+      userstore.id = userData.id;
       // 1. 从响应头中提取 tokens
       const authHeader = response.headers['authorization'];
       const refreshToken = response.headers['refresh-token'];

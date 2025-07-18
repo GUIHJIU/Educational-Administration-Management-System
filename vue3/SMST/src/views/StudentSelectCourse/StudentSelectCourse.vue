@@ -1,40 +1,69 @@
 <template>
   <div class="course-select-container">
     <h2>课程选择系统</h2>
-    <el-table :data="courseList" border>
-      <el-table-column prop="id" label="课程编号"></el-table-column>
-      <el-table-column prop="name" label="课程名称"></el-table-column>
+    <el-table :data="CourseList" border>
+      <el-table-column prop="courseId" label="课程编号"></el-table-column>
+      <el-table-column prop="courseName" label="课程名称"></el-table-column>
       <el-table-column prop="capacity" label="容量"></el-table-column>
       <el-table-column label="操作">
-        <template #default="scope">
+        <template v-slot="scope">
           <el-button
+              v-if="scope.row"
               type="primary"
-              @click="handleSelect(scope.row.id)"
-              :disabled="isCourseSelected(scope.row.id)">
-            {{ isCourseSelected(scope.row.id) ? '已选课' : '立即选课' }}
+              @click="handleSelect(scope.row.courseId)"
+              :disabled="isCourseSelected(scope.row.courseId)">
+            {{ isCourseSelected(scope.row.courseId) ? '已选课' : '立即选课' }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="loading">加载课程中...</div>
   </div>
 </template>
 
 <script>
-import {onMounted, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import apiClient from '@/utils/axios.js';
+import {useridentitystore} from '@/store/userStore';
 
 export default {
   setup() {
-    const courseList = ref([]);
+    const CourseList = reactive([]);
     const selectedCourses = ref([]);
+    const loading = ref(true);
+    const userstore = useridentitystore();
 
-    // 获取课程列表
     const fetchCourses = async () => {
       try {
-        const response = await apiClient().get('https://localhost:443/courses');
-        courseList.value = response.data.data;
+        const response = await apiClient.get('https://localhost:443/course');
+        // 双重保障：确保是数组且过滤无效数据
+        if (response.data?.data?.list && Array.isArray(response.data.data.list)) {
+          const courses = response.data.data.list;
+
+          // 清空现有列表
+          CourseList.splice(0, CourseList.length);
+
+          // 添加新课程（使用正确的字段名）
+          courses.forEach(course => {
+            CourseList.push({
+              courseId: course.courseId,
+
+              courseName: course.courseName,
+              credit: course.credit,
+              classHour: course.classHour,
+              courseType: course.courseType,
+              // 使用正确的教师字段名
+              teacherId: course.teacherId,
+              // 可选：添加其他需要的字段
+              capacity: course.capacity,
+              remaining: course.remaining
+            });
+          });
+        }
       } catch (error) {
         console.error('获取课程列表失败:', error);
+      } finally {
+        loading.value = false;
       }
     };
 
@@ -45,18 +74,12 @@ export default {
 
     // 处理选课操作
     const handleSelect = async (courseId) => {
-      const studentId = localStorage.getItem('studentId');
+      // const studentId = localStorage.getItem('studentId');
+      const studentId = userstore.id
 
       try {
-        const response = await axios.post(
-            `https://localhost:443/courses/${courseId}/select?studentId=${studentId}`,
-            {},
-            {
-              headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Refresh-Token': localStorage.getItem('refreshToken')
-              }
-            }
+        const response = await apiClient.post(
+            `https://localhost:443/course/${courseId}/select?studentId=${studentId}`
         );
 
         if (response.status === 200) {
@@ -73,7 +96,7 @@ export default {
     });
 
     return {
-      courseList,
+      CourseList,
       selectedCourses,
       isCourseSelected,
       handleSelect

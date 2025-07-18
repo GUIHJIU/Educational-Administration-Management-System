@@ -57,7 +57,7 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   try {
-    const response = await apiClient().put(`${API_BASE_URL}/update`, formData.value);
+    const response = await apiClient.put(`${API_BASE_URL}/update`, formData.value);
     if (response.status === 200) {
       alert('更新成功');
       await router.push('/score');

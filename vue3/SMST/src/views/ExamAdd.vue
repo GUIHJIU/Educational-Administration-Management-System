@@ -53,7 +53,7 @@ const formData = ref({
 
 const handleSubmit = async () => {
   try {
-    const response = await axios.post(API_BASE_URL, formData.value);
+    const response = await apiClient.post(API_BASE_URL, formData.value);
     if (response.status === 200) {
       alert('添加成功');
       router.push('/exam');

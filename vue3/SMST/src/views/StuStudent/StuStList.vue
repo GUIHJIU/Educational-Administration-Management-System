@@ -64,10 +64,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useridentitystore } from '@/store/userStore';
+import {onMounted, ref} from 'vue';
+import apiClient from '@/utils/axios';
+import {useRouter} from 'vue-router';
+import {useridentitystore} from '@/store/userStore';
 
 const studentInfo = ref(null);
 const router = useRouter();
@@ -101,7 +101,7 @@ const fetchStudentInfo = async () => {
       }
     }
 
-    const response = await axios.get(`${API_BASE_URL}/List`);
+    const response = await apiClient.get(`${API_BASE_URL}/List`);
     
     if (response.status === 200) {
       let data = response.data?.data || response.data || [];

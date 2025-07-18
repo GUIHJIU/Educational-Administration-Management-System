@@ -54,6 +54,7 @@ onMounted(async () => {
       courses.forEach(course => {
         CourseList.push({
           courseId: course.courseId,
+
           courseName: course.courseName,
           credit: course.credit,
           classHour: course.classHour,

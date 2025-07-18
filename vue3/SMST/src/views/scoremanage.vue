@@ -87,10 +87,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watchEffect } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useridentitystore } from '@/store/userStore'; // 假设你有一个 userStore 模块
+import {computed, onMounted, ref, watchEffect} from 'vue';
+import apiClient from '@/utils/axios';
+import {useRouter} from 'vue-router';
+import {useridentitystore} from '@/store/userStore'; // 假设你有一个 userStore 模块
 
 // 响应式变量声明
 const scoreList = ref([]);
@@ -189,7 +189,7 @@ onMounted(() => {
 // 方法定义
 const fetchScoreList = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/List`);
+    const response = await apiClient.get(`${API_BASE_URL}/List`);
     if (response.data && response.status === 200) {
       scoreList.value = Array.isArray(response.data) ? response.data :
                         Array.isArray(response.data.data) ? response.data.data : [];

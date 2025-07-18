@@ -22,7 +22,7 @@ const deleteStudentInfo = async () => {
 
   const API_BASE_URL = 'https://localhost:443/student';
   try {
-    const response = await apiClient().delete(`${API_BASE_URL}/delete/${stuNum}`);
+    const response = await apiClient.delete(`${API_BASE_URL}/delete/${stuNum}`);
 
     if (response.status === 200) {
       alert('删除成功');

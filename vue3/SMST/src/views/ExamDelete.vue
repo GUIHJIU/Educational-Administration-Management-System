@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-import type { AxiosError } from 'axios';
+import {onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import apiClient from '@/utils/axios'
+import type {AxiosError} from 'axios';
 
 const route = useRoute()
 const router = useRouter()
@@ -44,7 +44,7 @@ onMounted(async () => {
   examId.value = route.params.id as string
 
   try {
-    const response = await axios.get(`https://localhost:443/exams/${examId.value}`)
+    const response = await apiClient.get(`https://localhost:443/exams/${examId.value}`)
     if (response.status === 200) {
       form.value = response.data
     } else {
@@ -59,7 +59,7 @@ onMounted(async () => {
 
 const onSubmit = async () => {
   try {
-    const response = await axios.delete(`http://localhost:8080/exams/${examId.value}`)
+    const response = await apiClient.delete(`http://localhost:8080/exams/${examId.value}`)
     if (response.status === 200) {
       alert('删除成功')
       router.push('/exam')

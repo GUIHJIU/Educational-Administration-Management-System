@@ -139,7 +139,7 @@ onMounted(() => {
 // 方法定义
 const fetchStudentList = async () => {
   try {
-    const response = await apiClient().get(`${API_BASE_URL}/List`);
+    const response = await apiClient.get(`${API_BASE_URL}/List`);
     if (response.status === 200) {
       const data = response.data?.data || response.data || [];
       if (!Array.isArray(data)) {
@@ -220,7 +220,7 @@ const deleteStudent = async (stuNum) => {
     }
 
     // 使用路径参数方式调用删除接口
-    const response = await apiClient().delete(`${API_BASE_URL}/delete/${stuNum}`);
+    const response = await apiClient.delete(`${API_BASE_URL}/delete/${stuNum}`);
 
     if (response.status === 200) {
       alert('删除成功');

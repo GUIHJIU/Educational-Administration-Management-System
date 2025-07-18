@@ -34,9 +34,10 @@
 
 <script setup lang="ts">
 import {useridentitystore} from '@/store/userStore'
+import {onMounted, ref} from 'vue';
+import apiClient from '@/utils/axios';
+
 const userstore=useridentitystore()
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
 
 interface Exam {
   class_id: string;
@@ -62,7 +63,7 @@ const fetchExamList = async () => {
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/studentid`, {
+    const response = await apiClient.get(`${API_BASE_URL}/studentid`, {
       params: {
         studentid: studentId.value
       }

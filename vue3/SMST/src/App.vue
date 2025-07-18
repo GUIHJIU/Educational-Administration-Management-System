@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {RouterLink, RouterView, useRouter} from 'vue-router';
 import {useridentitystore} from '@/store/userStore'
+
 const userstore=useridentitystore()
 const router=useRouter()
 function handleLogout(){
@@ -24,7 +25,7 @@ function handleLogout(){
       <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/StuAdmin" class="nav-link">学生学籍管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
-      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
+      <RouterLink to="/select-course" class="nav-link">选课管理</RouterLink>
       <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
     </nav>
     <main class="main-content">

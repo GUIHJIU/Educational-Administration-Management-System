@@ -79,12 +79,14 @@
   
   <script setup lang="ts">
   import {useridentitystore} from '@/store/userStore'
-  const userstore=useridentitystore()
-  import { ref, onMounted, computed, watchEffect } from 'vue';
-  import axios, { AxiosError } from 'axios';
-  import { useRouter } from 'vue-router';
+  import {computed, onMounted, ref, watchEffect} from 'vue';
+  import {AxiosError} from 'axios';
+  import apiClient from '@/utils/axios';
+  import {useRouter} from 'vue-router';
 
-  
+  const userstore=useridentitystore()
+
+
   // 响应式变量声明
   interface Exam {
     class_id: string;
@@ -134,7 +136,7 @@
   // 方法定义
   const fetchExamList = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/List`);
+      const response = await apiClient.get(`${API_BASE_URL}/List`);
       if (response.data && response.status === 200) {
         examList.value = Array.isArray(response.data) ? response.data : 
                          Array.isArray(response.data.data) ? response.data.data : [];
@@ -175,8 +177,8 @@
       if (!confirm('确定要删除该考试信息吗？')) {
         return;
       }
-  
-      const response = await axios.delete(`${API_BASE_URL}/delete/${classId}`);
+
+      const response = await apiClient.delete(`${API_BASE_URL}/delete/${classId}`);
       if (response.status === 200) {
         alert('删除成功');
         await fetchExamList();

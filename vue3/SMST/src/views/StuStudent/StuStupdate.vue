@@ -45,9 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import {onMounted, ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import apiClient from '@/utils/axios';
 
 const router = useRouter();
 const route = useRoute();
@@ -113,7 +113,7 @@ const handleSubmit = async () => {
       stu_home: formData.value.stuHome
     };
     console.log('发送的更新数据:', JSON.stringify(updateData, null, 2));
-    const response = await axios.put(`${API_BASE_URL}/update`, updateData, {
+    const response = await apiClient.put(`${API_BASE_URL}/update`, updateData, {
       headers: {
         'Content-Type': 'application/json'
       }

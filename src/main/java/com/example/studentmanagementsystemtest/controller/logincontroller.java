@@ -52,6 +52,7 @@ public class logincontroller {
             User responseUser = new User();
             responseUser.setUsername(user.getUsername());
             responseUser.setPosition(user.getPosition());
+            responseUser.setId(user.getId());
 
             // 构造统一返回结构
             ResponseResult< User > responseResult = ResponseResult.success(responseUser)

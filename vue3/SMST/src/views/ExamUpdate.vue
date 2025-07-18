@@ -38,9 +38,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import {onMounted, ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import apiClient from '@/utils/axios';
 
 const router = useRouter();
 const route = useRoute();
@@ -66,7 +66,7 @@ onMounted(async () => {
 
 const handleSubmit = async () => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/update`, formData.value);
+    const response = await apiClient.put(`${API_BASE_URL}/update`, formData.value);
     if (response.status === 200) {
       alert('修改成功');
       router.push('/exam');

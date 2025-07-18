@@ -78,8 +78,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
+import {computed, onMounted, ref} from 'vue';
+import apiClient from '@/utils/axios';
 
 const studentList = ref([]);
 const searchKeyword = ref('');
@@ -118,7 +118,7 @@ onMounted(() => {
 // 方法定义
 const fetchStudentList = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/List`);
+    const response = await apiClient.get(`${API_BASE_URL}/List`);
     if (response.data && response.status === 200) {
       // 转换下划线命名为驼峰命名
       const convertData = (data) => {

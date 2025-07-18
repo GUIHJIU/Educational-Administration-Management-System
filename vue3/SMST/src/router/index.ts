@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Course from "@/views/Course.vue";
 import CourseNav from '@/views/CourseNav.vue'
 import AddCourse from '@/views/AddCourse.vue'
@@ -71,7 +71,7 @@ const router = createRouter({
         },
         {
             path: '/select-course',
-            name: 'SelectCourse',
+            name: 'StudentSelectCourse',
             component: () => import('../views/StudentSelectCourse/StudentSelectCourse.vue'),
             meta: {requiresAuth: true}
         },

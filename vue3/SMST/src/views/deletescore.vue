@@ -33,9 +33,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
+import apiClient from '@/utils/axios';
 
 const router = useRouter();
 const API_BASE_URL = 'https://localhost:443/score';
@@ -48,7 +48,7 @@ const formData = ref({
 
 const handleSubmit = async () => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/delete/${formData.value.studentid}/${formData.value.courseid}`);
+    const response = await apiClient.delete(`${API_BASE_URL}/delete/${formData.value.studentid}/${formData.value.courseid}`);
     if (response.status === 200) {
       alert('删除成功');
       router.push('/score');
