@@ -71,4 +71,21 @@ public class CourseManageController {
                                                   @RequestParam Long studentId) {
         return courseService.deductStock(courseId, studentId);
     }
+
+    // 获取学生已选课程接口
+    @GetMapping("/student/{studentId}/courses")
+    @Operation(summary = "获取学生已选课程")
+    public ResponseResult< List< Course > > getStudentCourses(@PathVariable Long studentId) {
+        List< Course > courses = courseService.getStudentCourses(studentId);
+        return ResponseResult.success(courses);
+    }
+
+    // 退课接口
+    @DeleteMapping("/{courseId}/drop")
+    @Operation(summary = "学生退课")
+    public ResponseResult< Boolean > dropCourse(@PathVariable Long courseId,
+                                                @RequestParam Long studentId) {
+        // 使用分布式锁保证操作的原子性
+        return courseService.increaseStockAndDeleteRecord(courseId, studentId);
+    }
 }

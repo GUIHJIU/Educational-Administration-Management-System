@@ -20,7 +20,7 @@ import ListPage from '../views/scoremanage.vue';
 import AddScore from '../views/Scoreadmin/Scoreadd.vue';
 import LoginPage from "@/views/LoginView.vue";
 import Persioninformation from "../views/persionInformation.vue";
-import {useridentitystore} from '@/store/userStore'
+import {useUserStore} from '@/store/userStore'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,20 +31,21 @@ const router = createRouter({
 
         },
         {
-            path:'/home',
-            component:Home,
-            meta:{
-                requiresRole: ['admin','teacher','student']
+            path: '/home',
+            component: Home,
+            meta: {
+                requiresRole: ['admin', 'teacher', 'student']
             }
         },
         {
-            path:"/Persion",
-            component:Persioninformation,
+            path: "/Persion",
+            component: Persioninformation,
             meta: {
                 requiresRole: ['student'] // 标记此路由需要普通用户角色才能访问
             },
         },
-        {path: '/StuAdmin',
+        {
+            path: '/StuAdmin',
             component: AdminListPage,
             meta: {
                 requiresRole: ['admin'] // 标记此路由需要超级用户角色才能访问
@@ -52,15 +53,24 @@ const router = createRouter({
         },
         {
             path: '/StuAdmin/StuAdadd',
-            component: StuAddPage
+            component: StuAddPage,
+            meta: {
+                requiresRole: ['admin']
+            }
         },
         {
             path: '/StuAdmin/StuAdupdate',
-            component: StuUpdatePage1
+            component: StuUpdatePage1,
+            meta: {
+                requiresRole: ['admin']
+            }
         },
         {
             path: '/StuAdmin/StuAddelete',
-            component: StuDeletePage
+            component: StuDeletePage,
+            meta: {
+                requiresRole: ['admin']
+            }
         },
         {
             path: '/TeacherList',
@@ -85,7 +95,10 @@ const router = createRouter({
         },
         {
             path: '/StudentList/Stuupdate',
-            component: StuUpdatePage2
+            component: StuUpdatePage2,
+            meta: {
+                requiresRole: ['student']
+            }
         },
         {
             path: '/coursenav',
@@ -97,40 +110,40 @@ const router = createRouter({
         {
             path: '/course',
             component: CourseNav,
-            children:[
+            children: [
                 {
-                    path:'addcourse',
-                    component:AddCourse,
-                    meta:{
-                        requiresRole:['teacher','admin']
+                    path: 'addcourse',
+                    component: AddCourse,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 },
                 {
-                    path:'allcourse',
-                    component:AllCourse,
-                    meta:{
-                        requiresRole:['teacher','admin','student']
+                    path: 'allcourse',
+                    component: AllCourse,
+                    meta: {
+                        requiresRole: ['teacher', 'admin', 'student']
                     }
                 },
                 {
-                    path:'updatecourse',
-                    component:UpdateCourse,
-                    meta:{
-                        requiresRole:['teacher','admin']
+                    path: 'updatecourse',
+                    component: UpdateCourse,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 },
                 {
-                    path:'deletecourse',
-                    component:DeleteCourse,
-                    meta:{
-                        requiresRole:['teacher','admin']
+                    path: 'deletecourse',
+                    component: DeleteCourse,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 },
                 {
-                    path:'selectcourse',
-                    component:SelectCourse,
-                    meta:{
-                        requiresRole:['teacher','admin','student']
+                    path: 'selectcourse',
+                    component: SelectCourse,
+                    meta: {
+                        requiresRole: ['teacher', 'admin', 'student']
                     }
                 }
             ]
@@ -146,17 +159,26 @@ const router = createRouter({
         {
             path: '/examAdd',
             name: 'ExamAdd',
-            component: () => import('../views/ExamAdd.vue')
+            component: () => import('../views/ExamAdd.vue'),
+            meta: {
+                requiresRole: ['teacher', 'admin']
+            }
         },
         {
             path: '/exam/update',
             name: 'ExamUpdate',
-            component: () => import('../views/ExamUpdate.vue')
+            component: () => import('../views/ExamUpdate.vue'),
+            meta: {
+                requiresRole: ['teacher', 'admin']
+            }
         },
         {
             path: '/exam/delete/:id',
             name: 'ExamDelete',
-            component: () => import('../views/ExamDelete.vue')
+            component: () => import('../views/ExamDelete.vue'),
+            meta: {
+                requiresRole: ['teacher', 'admin']
+            }
         },
         {
             path: '/studentexam',
@@ -170,23 +192,29 @@ const router = createRouter({
             path: '/score',
             name: 'list',
             component: ListPage,
-            children:[
-                {  path:'scoreadd',
-                    component:AddScore,
-                    meta:{
-                        requiresRole:['teacher','admin']
+            meta: {
+                requiresRole: ['teacher', 'admin', 'student']
+            },
+            children: [
+                {
+                    path: 'scoreadd',
+                    component: AddScore,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 },
-                {  path:'scoreupdate',
-                    component:UpdateScore,
-                    meta:{
-                        requiresRole:['teacher','admin']
+                {
+                    path: 'scoreupdate',
+                    component: UpdateScore,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 },
-                {  path:'scoredelete',
-                    component:DeleteScore,
-                    meta:{
-                        requiresRole:['teacher','admin']
+                {
+                    path: 'scoredelete',
+                    component: DeleteScore,
+                    meta: {
+                        requiresRole: ['teacher', 'admin']
                     }
                 }
             ]
@@ -194,24 +222,36 @@ const router = createRouter({
     ],
 })
 
-router.beforeEach((to, from, next) => {
-    const userstore=useridentitystore()
-    const userRole = userstore.identity;
-    if (to.meta.requiresRole)
-    {
+router.beforeEach(async (to, from, next) => {
+    const userStore = useUserStore();
+
+    // 验证token有效性
+    if (userStore.isAuthenticated) {
+        const isValid = await userStore.validateToken();
+        if (!isValid) {
+            // Token无效，跳转到登录页
+            next("/");
+            return;
+        }
+    }
+
+    const userRole = userStore.identity;
+    // 管理员可以访问所有页面
+    if (userRole === 'admin') {
+        next();
+        return;
+    }
+
+    if (to.meta.requiresRole) {
         // 如果有角色要求，对比当前用户角色是否匹配
         if (Array.isArray(to.meta.requiresRole) && to.meta.requiresRole.includes(userRole)) {
             next();
-        }
-        else
-        {
-            // 角色不匹配，跳转到登录页或者其他提示页面，这里跳转到登录页
+        } else {
+            // 角色不匹配，跳转到登录页
             next("/");
         }
-    }
-    else {
-        console.log('因角色不匹配，跳转到登录页');
-        next(); // 添加这一行，放行没有角色要求的路由
+    } else {
+        next(); // 放行没有角色要求的路由
     }
 });
 export default router

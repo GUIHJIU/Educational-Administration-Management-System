@@ -23,7 +23,7 @@
 import apiClient from "@/utils/axios";
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {useridentitystore} from '@/store/userStore';
+import {useUserStore} from '@/store/userStore';
 import axios from "axios";
 
 // 定义接口在顶层，避免重复定义
@@ -40,7 +40,7 @@ interface UserInfo {
   id: number;
 }
 
-const userstore = useridentitystore();
+const userstore = useUserStore();
 const username = ref('');
 const password = ref('');
 const router = useRouter();
@@ -75,7 +75,13 @@ const handleLogin = async () => {
       if (authHeader && authHeader.startsWith('Bearer ')) {
         const accessToken = authHeader.substring(7); // 去掉 "Bearer " 前缀
 
-        // 3. 存储 tokens
+        // 使用store的actions设置token
+        userstore.setTokens(accessToken, refreshToken);
+        userstore.setUser({
+          identity: userData.position,
+          username: username.value,
+          id: userData.id
+        });
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         userstore.accessToken = accessToken;
@@ -85,8 +91,6 @@ const handleLogin = async () => {
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
         // 保存到localStorage
-        localStorage.setItem('userAccount', username.value);
-        localStorage.setItem('userIdentity', userData.position);
 
 
         console.log('登录成功:', response);

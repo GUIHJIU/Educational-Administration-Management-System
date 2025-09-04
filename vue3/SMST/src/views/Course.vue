@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import {useridentitystore} from '@/store/userStore'
+import {RouterLink, RouterView} from 'vue-router'
+import {useUserStore} from '@/store/userStore'
 import {storeToRefs} from 'pinia'
-const userstore=useridentitystore()
+
+const userstore = useUserStore()
 const x=storeToRefs(userstore)
 function changehole()
 {

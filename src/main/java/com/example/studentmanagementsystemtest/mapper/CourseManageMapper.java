@@ -3,14 +3,11 @@ package com.example.studentmanagementsystemtest.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.example.studentmanagementsystemtest.entity.Course;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface CourseManageMapper extends BaseMapper< Course > {
@@ -69,4 +66,8 @@ public interface CourseManageMapper extends BaseMapper< Course > {
     @Delete("UPDATE course SET deleted = 1 WHERE courseId = #{courseId}")
     int deleteCourse(@Param("courseId") Long courseId);
 
+    @Update("UPDATE course SET remaining = remaining + 1, version = version + 1 " +
+            "WHERE courseId = #{courseId} AND version = #{version}")
+    int increaseStockWithVersion(@Param("courseId") Long courseId,
+                                 @Param("version") Integer version);
 }

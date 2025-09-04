@@ -33,11 +33,11 @@
 </template>
 
 <script setup lang="ts">
-import {useridentitystore} from '@/store/userStore'
+import {useUserStore} from '@/store/userStore'
 import {onMounted, ref} from 'vue';
 import apiClient from '@/utils/axios';
 
-const userstore=useridentitystore()
+const userstore = useUserStore()
 
 interface Exam {
   class_id: string;

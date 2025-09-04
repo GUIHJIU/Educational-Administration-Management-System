@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import {RouterLink, RouterView, useRouter} from 'vue-router';
-import {useridentitystore} from '@/store/userStore'
+import {useUserStore} from '@/store/userStore'
 
-const userstore=useridentitystore()
+const userstore = useUserStore()
 const router=useRouter()
 function handleLogout(){
-  userstore.identity='null'
-  userstore.username='null'
+  userstore.clearUser()
   router.push("/")
 }
 </script>
@@ -21,12 +20,15 @@ function handleLogout(){
   <div v-if="userstore.identity === 'admin'" id="app">
     <nav class="navbar">
       <RouterLink to="/home" class="nav-link">首页</RouterLink>
+      <!--      针对老师和管理员的用户信息不存在-->
       <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
-      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/StuAdmin" class="nav-link">学生学籍管理</RouterLink>
+      <!--      待修改，教师管理不存在-->
+      <!--      <RouterLink to="/TeacherList" class="nav-link">教师管理</RouterLink>-->
+      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
-      <RouterLink to="/select-course" class="nav-link">选课管理</RouterLink>
       <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
+      <RouterLink to="/select-course" class="nav-link">选课管理</RouterLink>
     </nav>
     <main class="main-content">
       <RouterView />
@@ -35,12 +37,13 @@ function handleLogout(){
   <div v-else-if="userstore.identity === 'teacher'" id="app">
     <nav class="navbar">
       <RouterLink to="/home" class="nav-link">首页</RouterLink>
+      <!--      -->
       <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
-      <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
-      <RouterLink to="/TeacherList" class="nav-link">学生学籍管理</RouterLink>
+      <RouterLink to="/TeacherList" class="nav-link">学生管理</RouterLink>
+      <RouterLink to="/course" class="nav-link">课程管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
-      <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
       <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
+      <RouterLink to="/select-course" class="nav-link">选课管理</RouterLink>
     </nav>
     <main class="main-content">
       <RouterView />
@@ -51,8 +54,8 @@ function handleLogout(){
       <RouterLink to="/home" class="nav-link">首页</RouterLink>
       <RouterLink :to="{ path: '/Persion', query: { studentId: userstore.username }}" class="nav-link">用户信息管理</RouterLink>
       <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
-      <RouterLink to="/StudentList" class="nav-link">学生学籍管理</RouterLink>
-      <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
+      <RouterLink to="/StudentList" class="nav-link">学生信息</RouterLink>
+      <RouterLink to="/score" class="nav-link">成绩查询</RouterLink>
       <RouterLink to="/course-selection" class="nav-link">选课管理</RouterLink>
       <RouterLink to="/studentexam" class="nav-link">考试管理</RouterLink>
     </nav>

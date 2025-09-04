@@ -18,4 +18,9 @@ public interface SelectionRecordService {
     List< Course > getStudentCourses(Long studentId);
 
     boolean addSelectedCourseRecord(SelectionRecord SR);
+
+    /**
+     * 删除选课记录（退课）
+     */
+    boolean deleteSelectedCourseRecord(Long studentId, Long courseId);
 }

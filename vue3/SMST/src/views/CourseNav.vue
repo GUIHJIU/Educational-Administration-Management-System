@@ -37,9 +37,10 @@
   <RouterView />
 </template>
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import {useridentitystore} from '@/store/userStore'
-const userstore=useridentitystore()
+import {RouterLink, RouterView} from 'vue-router'
+import {useUserStore} from '@/store/userStore'
+
+const userstore = useUserStore()
 </script>
 <style scoped>
 header {

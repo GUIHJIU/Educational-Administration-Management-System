@@ -1,12 +1,25 @@
-import './assets/main.css'
-import {createPinia} from 'pinia'
-import { createApp } from 'vue'
+// 在main.ts中添加应用启动时的token验证
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
-const app = createApp(App);
-const pinia=createPinia();
+import {createPinia} from 'pinia'
+import {useUserStore} from '@/store/userStore'
 
-app.use(pinia);
+const app = createApp(App)
+const pinia = createPinia()
+
+app.use(pinia)
 app.use(router)
 
-app.mount('#app')
+// 在应用挂载前验证token
+const userStore = useUserStore()
+if (userStore.isAuthenticated) {
+    userStore.validateToken().then(isValid => {
+        if (!isValid) {
+            console.log('Token已失效，请重新登录')
+        }
+        app.mount('#app')
+    })
+} else {
+    app.mount('#app')
+}

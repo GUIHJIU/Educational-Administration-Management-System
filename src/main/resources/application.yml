@@ -17,7 +17,7 @@ mybatis-plus:
 server:
   port: 443  # HTTPS 默认端口
   ssl:
-    key-store: classpath:keystore.p12      # 证书路径（自签名）
+    key-store: classpath:keystore1.p12      # 证书路径（自签名）
     key-store-password: zd004921            # 密钥库密码
     key-store-type: PKCS12                 # 证书类型
-    key-alias: mydomain                    # 证书别名
+    key-alias: localhost                    # 证书别名

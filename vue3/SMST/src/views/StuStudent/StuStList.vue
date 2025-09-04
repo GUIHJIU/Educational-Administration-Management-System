@@ -67,11 +67,11 @@
 import {onMounted, ref} from 'vue';
 import apiClient from '@/utils/axios';
 import {useRouter} from 'vue-router';
-import {useridentitystore} from '@/store/userStore';
+import {useUserStore} from '@/store/userStore';
 
 const studentInfo = ref(null);
 const router = useRouter();
-const userStore = useridentitystore();
+const userStore = useUserStore();
 
 const API_BASE_URL = 'https://localhost:443/student';
 

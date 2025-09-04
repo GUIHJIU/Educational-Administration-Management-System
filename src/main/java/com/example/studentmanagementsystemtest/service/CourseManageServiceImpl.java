@@ -166,6 +166,25 @@ public class CourseManageServiceImpl
         return checkConflictAtDatabaseLevel(studentId, courseId);
     }
 
+    /**
+     * 获取学生已选课程
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List< Course > getStudentCourses(Long studentId) {
+        return selectionService.getStudentCourses(studentId);
+    }
+
+    /**
+     * 增加课程余量（退课时使用）
+     */
+    @Override
+    @Transactional
+    public int increaseStock(Long courseId) {
+        Course course = getByIdWithCheck(courseId);
+        return baseMapper.increaseStockWithVersion(courseId, course.getVersion());
+    }
+
     //-- 私有方法 --//
     private Course getByIdWithCheck(Long courseId) {
         Course course = getById(courseId);
@@ -196,5 +215,49 @@ public class CourseManageServiceImpl
         return baseMapper.checkTimeConflictInDB(studentId,
                 getById(courseId).getStartTime(),
                 getById(courseId).getEndTime());
+    }
+
+    /**
+     * 增加课程余量并删除选课记录（退课操作）
+     */
+    public ResponseResult< Boolean > increaseStockAndDeleteRecord(Long courseId, Long studentId) {
+        RLock lock = redissonClient.getLock("course:lock:" + courseId);
+        boolean lockAcquired = false;
+        try {
+            lockAcquired = lock.tryLock(3, 15, TimeUnit.SECONDS);
+            if (lockAcquired) {
+                return transactionTemplate.execute(status -> {
+                    try {
+                        Course course = getByIdWithCheck(courseId);
+                        int result = baseMapper.increaseStockWithVersion(courseId, course.getVersion());
+                        if (result > 0) {
+                            boolean deleteResult = selectionService.deleteSelectedCourseRecord(studentId, courseId);
+                            if (deleteResult) {
+                                log.info("退课成功，课程ID：{}，学生ID：{}", courseId, studentId);
+                                return ResponseResult.success(true);
+                            } else {
+                                status.setRollbackOnly();
+                                return ResponseResult.error(ErrorCode.OPERATION_FAILED);
+                            }
+                        } else {
+                            status.setRollbackOnly();
+                            return ResponseResult.error(ErrorCode.OPERATION_FAILED);
+                        }
+                    } catch (Exception e) {
+                        status.setRollbackOnly();
+                        throw new BusinessException(ErrorCode.OPERATION_FAILED, e.getMessage());
+                    }
+                });
+            } else {
+                return ResponseResult.error(ErrorCode.SERVICE_BUSY);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BusinessException(ErrorCode.SERVICE_BUSY);
+        } finally {
+            if (lockAcquired && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
     }
 }

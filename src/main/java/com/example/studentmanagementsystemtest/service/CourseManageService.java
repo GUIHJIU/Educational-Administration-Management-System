@@ -19,6 +19,11 @@ public interface CourseManageService extends IService< Course > {  // 继承MyBa
 
     boolean checkTimeConflict(Long studentId, Long courseId);
 
+    // 新增：获取学生已选课程
+    List< Course > getStudentCourses(Long studentId);
+
+    // 新增：增加课程余量（退课时使用）
+    int increaseStock(Long courseId);
     // 原接口方法声明
     List< Course > ShowAllCourse();
 

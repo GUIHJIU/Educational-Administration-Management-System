@@ -78,13 +78,13 @@
   </template>
   
   <script setup lang="ts">
-  import {useridentitystore} from '@/store/userStore'
+  import {useUserStore} from '@/store/userStore'
   import {computed, onMounted, ref, watchEffect} from 'vue';
   import {AxiosError} from 'axios';
   import apiClient from '@/utils/axios';
   import {useRouter} from 'vue-router';
 
-  const userstore=useridentitystore()
+  const userstore = useUserStore()
 
 
   // 响应式变量声明

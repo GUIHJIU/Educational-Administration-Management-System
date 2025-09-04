@@ -90,7 +90,7 @@
 import {computed, onMounted, ref, watchEffect} from 'vue';
 import apiClient from '@/utils/axios';
 import {useRouter} from 'vue-router';
-import {useridentitystore} from '@/store/userStore'; // 假设你有一个 userStore 模块
+import {useUserStore} from '@/store/userStore'; // 假设你有一个 userStore 模块
 
 // 响应式变量声明
 const scoreList = ref([]);
@@ -99,7 +99,7 @@ const courseid = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
 const router = useRouter();
-const userStore = useridentitystore();
+const userStore = useUserStore();
 
 const API_BASE_URL = 'https://localhost:443/score';
 

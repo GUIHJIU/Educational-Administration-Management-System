@@ -47,4 +47,13 @@ public class SelectionRecordServiceImpl
         int result = selectionRecordMapper.insert(SR);
         return result != 0;
     }
+
+    @Override
+    public boolean deleteSelectedCourseRecord(Long studentId, Long courseId) {
+        // 逻辑删除选课记录
+        return update().eq("studentId", studentId)
+                .eq("courseId", courseId)
+                .set("deleted", 1)
+                .update();
+    }
 }
