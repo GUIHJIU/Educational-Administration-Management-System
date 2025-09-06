@@ -21,3 +21,11 @@ server:
     key-store-password: zd004921            # 密钥库密码
     key-store-type: PKCS12                 # 证书类型
     key-alias: localhost                    # 证书别名
+
+# 添加日志级别配置
+logging:
+  level:
+    com.example.studentmanagementsystemtest.mapper: debug
+    org.mybatis: debug
+    org.apache.ibatis: debug
+    java.sql: debug

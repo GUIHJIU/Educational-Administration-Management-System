@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
     // 未知异常兜底处理
     @ExceptionHandler(Exception.class)
     public ResponseEntity< ResponseResult< ? > > handleUnexpectedException(Exception ex) {
+        ex.printStackTrace();
         return ResponseEntity.status(500)
                 .body(ResponseResult.error(ErrorCode.INTERNAL_ERROR));
     }

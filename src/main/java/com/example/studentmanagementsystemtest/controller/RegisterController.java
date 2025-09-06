@@ -16,19 +16,23 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/logon")
 public class RegisterController {
     private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+    private static final Set< String > VALID_POSITIONS = Set.of("student", "teacher", "admin");
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
     @Autowired
     RegisterMapper registerMapper;
 
     @PostMapping("/logon")
-    public ResponseEntity< ? > RegisterUser(@RequestParam String username, @RequestParam String rawPassword) {
+    public ResponseEntity< ? > RegisterUser(@RequestParam String username,
+                                            @RequestParam String rawPassword,
+                                            @RequestParam String position) {
 
         if (username.isEmpty() || rawPassword.isEmpty()) {
             return ResponseEntity.badRequest().body("用户名和密码不能为空");
@@ -36,6 +40,9 @@ public class RegisterController {
 
         if (!PASSWORD_PATTERN.matcher(rawPassword).matches()) {
             return ResponseEntity.badRequest().body("密码需至少8位，包含大小写字母和数字");
+        }
+        if (!VALID_POSITIONS.contains(position)) {
+            return ResponseEntity.badRequest().body("用户身份无效，必须是student、teacher或admin之一");
         }
         if (registerMapper.existsByUsername(username) > 0) {
             return ResponseEntity.status(409).body("用户名已存在");
@@ -46,6 +53,7 @@ public class RegisterController {
             newUser.setUsername(username);
             newUser.setPassword(hashedPassword.get("hash"));
             newUser.setSalt(hashedPassword.get("salt"));
+            newUser.setPosition(position);
             registerMapper.insert(newUser);
             return ResponseEntity.ok("注册成功");
         } catch (Exception e) {
