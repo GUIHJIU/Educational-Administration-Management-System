@@ -9,7 +9,7 @@
           <option value="credit">课程学分</option>
           <option value="classHour">课程学时</option>
           <option value="courseType">课程类型</option>
-          <option value="Teacher">课程教师</option>
+          <option value="Exam">课程教师</option>
         </select>
       </div>
       <div>
@@ -20,16 +20,18 @@
     </form>
     <ul v-if="courseStore.courses.length">
       <li v-for="course in courseStore.courses" :key="course.courseId">
-        {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} - {{ course.courseType }} - {{ course.Teacher }}
+        {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} -
+        {{ course.courseType }} - {{ course.Exam }}
       </li>
     </ul>
     <p v-else>No courses found.</p>
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted,ref } from 'vue';
-  import { useCourseStore } from '../store/courseStore';
-  const courseStore = useCourseStore();
+import {ref} from 'vue';
+import {useCourseStore} from '../store/courseStore';
+
+const courseStore = useCourseStore();
   const searchBy=ref('')
   const searchValue=ref('')
   function searchCourses(){

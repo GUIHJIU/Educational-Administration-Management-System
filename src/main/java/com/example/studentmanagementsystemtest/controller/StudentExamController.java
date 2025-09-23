@@ -1,6 +1,6 @@
 package com.example.studentmanagementsystemtest.controller;
 
-import com.example.studentmanagementsystemtest.entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Exam;
 import com.example.studentmanagementsystemtest.service.StudentExamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,26 +18,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/studentexams")
 public class StudentExamController {
-    private static final Logger logger = LoggerFactory.getLogger(Teachercontroller.class);
+    private static final Logger logger = LoggerFactory.getLogger(TeacherExamController.class);
     @Autowired
     private StudentExamService studentExamService;
 
     @GetMapping("/studentid")
-    public List<Teacher> getstudentexamList(@RequestParam("studentid") Integer studentid) {
+    public List< Exam > getstudentexamList(@RequestParam("studentid") Integer studentid) {
             System.out.println("1");
         try {
-            List<Teacher> getstudentexamList = studentExamService.getClassInfoByStudentId(studentid);
+            List< Exam > getstudentexamList = studentExamService.getClassInfoByStudentId(studentid);
             logger.info("成功获取到 {} 条考试信息", getstudentexamList.size());
             System.out.println(getstudentexamList);
             return new ResponseEntity<>(getstudentexamList, HttpStatus.OK).getBody();
         } catch (DataAccessException e)
         {
             logger.error("获取考试信息列表出现数据库访问异常", e);
-            return (List<Teacher>) new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return (List< Exam >) new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e)
         {
             logger.error("获取考信息列表出现其他异常", e);
-            return (List<Teacher>) new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return (List< Exam >) new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 }
 }

@@ -1,6 +1,6 @@
 package com.example.studentmanagementsystemtest.service;
 
-import com.example.studentmanagementsystemtest.entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Exam;
 import com.example.studentmanagementsystemtest.mapper.StudentExamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class StudentExamService implements StudentExamServiceimpl {
 
     // 根据学生 ID 查询该学生的所有考试信息
     @Override
-    public List<Teacher> getClassInfoByStudentId(int studentid) {
+    public List< Exam > getClassInfoByStudentId(int studentid) {
         return studentExamMapper.getClassInfoByStudentId(studentid);
     }
 }

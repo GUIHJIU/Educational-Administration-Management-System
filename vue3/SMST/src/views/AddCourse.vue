@@ -19,8 +19,8 @@
           <input type="text" v-model="course.courseType" id="courseType" required />
         </div>
         <div>
-          <label for="Teacher">课程教师:</label>
-          <input type="text" v-model="course.Teacher" id="Teacher" required />
+          <label for="Exam">课程教师:</label>
+          <input type="text" v-model="course.Exam" id="Exam" required/>
         </div>
         <button type="submit">添加课程</button>
       </form>
@@ -36,7 +36,7 @@
     classHour:'',
     credit:'',
     courseType:'',
-    Teacher:''
+    Exam: ''
   })
     const addCourse=async()=> {
       if (course.value.courseName && course.value.classHour && course.value.credit) {
@@ -46,7 +46,7 @@
           course.value.classHour=''
           course.value.credit=''
           course.value.courseType=''
-          course.value.Teacher=''
+          course.value.Exam = ''
           // 显示成功消息（可选）
           console.log(response.data);
           alert('课程已成功添加！');

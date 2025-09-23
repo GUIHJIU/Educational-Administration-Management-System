@@ -7,28 +7,22 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("teacherinformation") // 指定数据库表名
-public class Teacher {
+@TableName("admininformation") // 指定数据库表名
+public class Admin {
     @TableId(value = "id", type = IdType.AUTO) // 主键字段
     private int id;
 
-    @TableField("teacher_num") // 映射字段名
-    private String teacherNum;
+    @TableField("admin_num") // 映射字段名
+    private String adminNum;
 
-    @TableField("teacher_name")
-    private String teacherName;
+    @TableField("admin_name")
+    private String adminName;
 
-    @TableField("teacher_sex")
-    private String teacherSex;
+    @TableField("admin_sex")
+    private String adminSex;
 
-    @TableField("teacher_phone")
-    private String teacherPhone;
-
-    @TableField("teacher_college")
-    private String teacherCollege;
-
-    @TableField("teacher_major")
-    private String teacherMajor;
+    @TableField("admin_phone")
+    private String adminPhone;
 
     @TableField("create_time")
     private String createTime;

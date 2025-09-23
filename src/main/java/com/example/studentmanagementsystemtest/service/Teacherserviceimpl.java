@@ -1,23 +1,12 @@
 package com.example.studentmanagementsystemtest.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.studentmanagementsystemtest.entity.Teacher;
+import com.example.studentmanagementsystemtest.mapper.Teachermapper;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-public interface Teacherserviceimpl
-{
-    //新增
-    public void add(Teacher teacher);
-    //列表
-    public List<Teacher> getAllTeacher();
-    //更新学生信息
-    public int updateTeacher(Teacher teacher);
-
-    // 删除学生信息
-    public void deleteTeacher(String class_id);
-
-    //根据用户学号查询学生信息
-    public Teacher getTeacher(String class_id);
-
-
+@Service
+public class Teacherserviceimpl extends ServiceImpl< Teachermapper, Teacher > implements Teacherservice {
+    // MyBatis-Plus已经提供了常用的CRUD方法，可以直接使用
+    // 如需自定义业务逻辑，可在此添加
 }

@@ -22,6 +22,10 @@ server:
     key-store-type: PKCS12                 # 证书类型
     key-alias: localhost                    # 证书别名
 
+
+analysis:
+  service:
+    url: http://localhost:5001
 # 添加日志级别配置
 logging:
   level:

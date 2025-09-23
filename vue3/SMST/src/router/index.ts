@@ -21,6 +21,11 @@ import AddScore from '../views/Scoreadmin/Scoreadd.vue';
 import LoginPage from "@/views/LoginView.vue";
 import Persioninformation from "../views/persionInformation.vue";
 import {useUserStore} from '@/store/userStore'
+// 教师管理相关组件
+import TeacherList from '../views/Stuteacher/TeacherList.vue'
+import TeacherAdd from '../views/Stuteacher/TeacherAdd.vue'
+import TeacherEdit from '../views/Stuteacher/TeacherEdit.vue'
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -218,6 +223,27 @@ const router = createRouter({
                     }
                 }
             ]
+        },// 教师管理路由
+        {
+            path: '/teacher/list',
+            component: TeacherList,
+            meta: {
+                requiresRole: ['admin']
+            }
+        },
+        {
+            path: '/teacher/add',
+            component: TeacherAdd,
+            meta: {
+                requiresRole: ['admin']
+            }
+        },
+        {
+            path: '/teacher/edit/:id',
+            component: TeacherEdit,
+            meta: {
+                requiresRole: ['admin']
+            }
         },
     ],
 })

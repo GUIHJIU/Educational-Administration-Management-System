@@ -21,8 +21,8 @@
             <input type="text" v-model="courseStore.selectedCourse.classHour" id="classhour" required/>
             <label for="courseType">课程类型:</label>
             <input type="text" v-model="courseStore.selectedCourse.courseType" id="courseType" required/>
-            <label for="Teacher">课程教师:</label>
-            <input type="text" v-model="courseStore.selectedCourse.Teacher" id="Teacher" required/>
+            <label for="Exam">课程教师:</label>
+            <input type="text" v-model="courseStore.selectedCourse.Exam" id="Exam" required/>
           </div>
           <!-- 其他课程信息的表单字段 -->
           <button type="submit">保存修改</button>
@@ -31,7 +31,7 @@
       <ul>
         <li v-for="course in filteredCourses" :key="course.courseId">
           {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} -
-          {{ course.courseType }} - {{ course.Teacher }}
+          {{ course.courseType }} - {{ course.Exam }}
           <button @click="courseStore.selectCourse(course.courseId)">修改</button>
         </li>
       </ul>
@@ -40,9 +40,9 @@
   </template>
 
   <script lang="ts" setup>
-  import { onMounted ,ref,computed} from 'vue';
-  import { useCourseStore } from '../store/courseStore';
-  import router from "@/router";
+  import {computed, onMounted, ref} from 'vue';
+  import {useCourseStore} from '../store/courseStore';
+
   const searchQuery = ref('');
   const courseStore = useCourseStore();
 
@@ -54,7 +54,7 @@
     const query = searchQuery.value;
     return courseStore.courses.filter(course => {
       return (
-          course.Teacher.includes(query) ||
+          course.Exam.includes(query) ||
           course.courseName.includes(query) ||
           course.courseType.includes(query)
       );

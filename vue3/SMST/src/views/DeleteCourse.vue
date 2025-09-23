@@ -16,7 +16,7 @@
           <ul>
             <li v-for="course in filteredCourses" :key="course.courseId">
               {{ course.courseId }} - {{ course.courseName }} - {{ course.credit }} - {{ course.classHour }} -
-              {{ course.courseType }} - {{ course.Teacher }}
+              {{ course.courseType }} - {{ course.Exam }}
               <button @click="courseStore.selectCourse(course.courseId)">删除</button>
             </li>
           </ul>
@@ -24,9 +24,9 @@
         </div>
 </template>
 <script lang="ts" setup>
-import {onMounted, ref ,computed} from 'vue';
-  import { useCourseStore } from '../store/courseStore';
-import router from "@/router";
+import {computed, onMounted, ref} from 'vue';
+import {useCourseStore} from '../store/courseStore';
+
 const searchQuery = ref('');
 const courseStore = useCourseStore();
 
@@ -37,7 +37,7 @@ const filteredCourses = computed(() => {
   const query = searchQuery.value.toLowerCase();
   return courseStore.courses.filter(course => {
     return (
-        course.Teacher.toLowerCase().includes(query) ||
+        course.Exam.toLowerCase().includes(query) ||
         course.courseName.toLowerCase().includes(query) ||
         course.courseType.toLowerCase().includes(query)
     );

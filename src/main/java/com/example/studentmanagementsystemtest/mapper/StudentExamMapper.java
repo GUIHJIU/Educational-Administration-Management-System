@@ -1,7 +1,7 @@
 package com.example.studentmanagementsystemtest.mapper;
 
 
-import com.example.studentmanagementsystemtest.entity.Teacher;
+import com.example.studentmanagementsystemtest.entity.Exam;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,6 +16,6 @@ public interface StudentExamMapper {
             @Result(property = "time_exam", column = "time"),
             @Result(property = "locations", column = "location"),
     })
-    List<Teacher> getClassInfoByStudentId(@Param("studentid") int studentId);
+    List< Exam > getClassInfoByStudentId(@Param("studentid") int studentId);
 
 }

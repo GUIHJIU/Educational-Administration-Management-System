@@ -19,7 +19,7 @@
         <td>{{ item.credit }}</td>
         <td>{{ item.classHour }}</td>
         <td>{{ item.courseType }}</td>
-        <td>{{ item.Teacher }}</td>
+        <td>{{ item.Exam }}</td>
       </tr>
       </tbody>
     </table>

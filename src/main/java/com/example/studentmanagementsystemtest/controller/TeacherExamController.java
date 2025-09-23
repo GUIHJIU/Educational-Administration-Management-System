@@ -1,7 +1,7 @@
 package com.example.studentmanagementsystemtest.controller;
 
-import com.example.studentmanagementsystemtest.entity.Teacher;
-import com.example.studentmanagementsystemtest.service.Teacherservice;
+import com.example.studentmanagementsystemtest.entity.Exam;
+import com.example.studentmanagementsystemtest.service.TeacherExamService;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,20 +9,21 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/exams")
-public class Teachercontroller {
-    private static final Logger logger = LoggerFactory.getLogger(Teachercontroller.class);
+public class TeacherExamController {
+    private static final Logger logger = LoggerFactory.getLogger(TeacherExamController.class);
     @Resource
-    Teacherservice teacherservice;
+    TeacherExamService teacherExamService;
 
     @PostMapping("/add")
-    public ResponseEntity<Integer> add(@RequestBody Teacher teacher) {
+    public ResponseEntity< Integer > add(@RequestBody Exam exam) {
         try {
 
-            teacherservice.add(teacher);
+            teacherExamService.add(exam);
 
             return ResponseEntity.ok(200);
         } catch (DataAccessException e)
@@ -40,12 +41,12 @@ public class Teachercontroller {
     }
 
     @GetMapping("/List")
-    public ResponseEntity<List<Teacher>> getTeacherList() {
+    public ResponseEntity< List< Exam > > getTeacherList() {
         try {
 
-            List<Teacher> teacherList = teacherservice.getAllTeacher();
-            logger.info("成功获取到 {} 条考试信息", teacherList.size());
-            return new ResponseEntity<>(teacherList, HttpStatus.OK);
+            List< Exam > examList = teacherExamService.getAllTeacher();
+            logger.info("成功获取到 {} 条考试信息", examList.size());
+            return new ResponseEntity<>(examList, HttpStatus.OK);
         } catch (DataAccessException e)
         {
             logger.error("获取考试信息列表出现数据库访问异常", e);
@@ -59,12 +60,12 @@ public class Teachercontroller {
 
 
     @PutMapping("/update")
-    public ResponseEntity<Integer> updateTeacher(@RequestBody Teacher teacher)
+    public ResponseEntity< Integer > updateTeacher(@RequestBody Exam exam)
     {
 
         try
         {
-            int result = teacherservice.updateTeacher(teacher);
+            int result = teacherExamService.updateTeacher(exam);
             if (result > 0)
             {
                 return new ResponseEntity<>(200, HttpStatus.OK);
@@ -84,8 +85,8 @@ public class Teachercontroller {
     @GetMapping("/{class_id}")
     public ResponseEntity<Integer> getTeacher(@PathVariable String class_id) {
         try {
-            Teacher teacher = teacherservice.getTeacher(class_id);
-            if (teacher!= null) {
+            Exam exam = teacherExamService.getTeacher(class_id);
+            if (exam != null) {
 
                 return new ResponseEntity<>(200, HttpStatus.OK);
             } else {
@@ -108,7 +109,7 @@ public class Teachercontroller {
     public ResponseEntity<Integer> deleteTeacher(@PathVariable String class_id)
     {
 
-        teacherservice.deleteTeacher(class_id);
+        teacherExamService.deleteTeacher(class_id);
         return ResponseEntity.ok(200);
     }
 

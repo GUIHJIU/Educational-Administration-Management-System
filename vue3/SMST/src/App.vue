@@ -23,8 +23,7 @@ function handleLogout(){
       <!--      针对老师和管理员的用户信息不存在-->
       <RouterLink to="/user-info" class="nav-link">用户信息管理</RouterLink>
       <RouterLink to="/StuAdmin" class="nav-link">学生学籍管理</RouterLink>
-      <!--      待修改，教师管理不存在-->
-      <!--      <RouterLink to="/TeacherList" class="nav-link">教师管理</RouterLink>-->
+      <RouterLink to="/teacher/list" class="nav-link">教师管理</RouterLink>
       <RouterLink to="/course" class="nav-link">课程信息管理</RouterLink>
       <RouterLink to="/score" class="nav-link">成绩管理</RouterLink>
       <RouterLink to="/exam" class="nav-link">考试管理</RouterLink>
